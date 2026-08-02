@@ -28,7 +28,7 @@ def scan_commands(base_path: Path) -> List[Dict]:
 
         # Build command name from path
         parts = list(rel_path.parts[:-1]) + [rel_path.stem]
-        command_name = '/bk:' + ':'.join(parts)
+        command_name = '/basedkit:' + ':'.join(parts)
 
         # Read file and extract frontmatter
         try:

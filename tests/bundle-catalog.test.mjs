@@ -7,7 +7,7 @@ import test from 'node:test';
 import { loadBundleCatalog } from '../bin/bundle-catalog.mjs';
 
 test('discovers a new bundle and its skills without launcher code changes', async () => {
-  const root = mkdtempSync(path.join(os.tmpdir(), 'basekit-catalog-'));
+  const root = mkdtempSync(path.join(os.tmpdir(), 'basedkit-catalog-'));
   const bundleRoot = path.join(root, 'bundles', 'quality');
   await mkdir(path.join(bundleRoot, 'skills', 'accessibility'), { recursive: true });
   await mkdir(path.join(bundleRoot, 'skills', 'performance'), { recursive: true });

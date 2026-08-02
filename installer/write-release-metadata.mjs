@@ -19,14 +19,14 @@ if (!args.app) throw new Error('--app is required');
 
 const metadata = {
   schemaVersion: 1,
-  version: args.version || '1.2.0',
-  repository: args.repository || 'dat-hoangnguyentuandat/basekit',
+  version: args.version || '2.0.0',
+  repository: args.repository || 'dat-hoangnguyentuandat/basedkit',
   ref: args.ref || 'main',
   installedCommit: args.commit || null,
   installedAt: new Date().toISOString(),
 };
 
-const destination = path.join(path.resolve(args.app), '.basekit-release.json');
+const destination = path.join(path.resolve(args.app), '.basedkit-release.json');
 await mkdir(path.dirname(destination), { recursive: true });
 await writeFile(destination, `${JSON.stringify(metadata, null, 2)}\n`, 'utf8');
-console.log(`Recorded BaseKit release metadata at ${destination}`);
+console.log(`Recorded BasedKit release metadata at ${destination}`);

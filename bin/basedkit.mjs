@@ -8,7 +8,7 @@ import { fileURLToPath } from 'node:url';
 import { loadBundleCatalog } from './bundle-catalog.mjs';
 import { checkForUpdate, updateSummary } from './update-check.mjs';
 
-const VERSION = '1.2.0';
+const VERSION = '2.0.0';
 const WIDTH = 68;
 const sourceRoot = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const enginePath = path.join(sourceRoot, 'installer', 'install.mjs');
@@ -36,19 +36,19 @@ function parseArgs(argv) {
 }
 
 function printHelp() {
-  console.log(`BaseKit ${VERSION}
+  console.log(`BasedKit ${VERSION}
 
 Usage:
-  basekit                         Open the interactive launcher
-  basekit claude                  Install Base for Claude Code
-  basekit codex                   Install Base for Codex
-  basekit all                     Install Base for both providers
-  basekit codex --bundles base,cms
-  basekit update                  Install the latest launcher and bundled kit
-  basekit update --check          Check GitHub without installing
-  basekit <provider> -C .         Install into a specific project
-  basekit version                 Print the launcher version
-  basekit help                    Print this help`);
+  basedkit                         Open the interactive launcher
+  basedkit claude                  Install Base for Claude Code
+  basedkit codex                   Install Base for Codex
+  basedkit all                     Install Base for both providers
+  basedkit codex --bundles base,cms
+  basedkit update                  Install the latest launcher and bundled kit
+  basedkit update --check          Check GitHub without installing
+  basedkit <provider> -C .         Install into a specific project
+  basedkit version                 Print the launcher version
+  basedkit help                    Print this help`);
 }
 
 function clear() {
@@ -57,7 +57,7 @@ function clear() {
 
 function title(subtitle) {
   clear();
-  console.log('\n                           b a s e k i t\n');
+  console.log('\n                         b a s e d k i t\n');
   console.log(`  +${'-'.repeat(WIDTH)}+`);
   console.log(`  | ${subtitle.slice(0, WIDTH - 2).padEnd(WIDTH - 1)}|`);
   console.log(`  +${'-'.repeat(WIDTH)}+`);
@@ -72,7 +72,7 @@ function menuLine(label, selected, prefix = '') {
 
 function ensureInteractive() {
   if (!process.stdin.isTTY || !process.stdout.isTTY || !process.stdin.setRawMode) {
-    throw new Error('Interactive input is unavailable. Run basekit claude, basekit codex, or basekit all.');
+    throw new Error('Interactive input is unavailable. Run basedkit claude, basedkit codex, or basedkit all.');
   }
 }
 
@@ -115,7 +115,7 @@ async function mainMenu(target, updateState) {
     ['Codex', 'Install or update a Codex project.'],
     ['All', 'Install or update both provider integrations.'],
     ['Check for Updates', 'Open update status and actions.'],
-    ['Exit', 'Close BaseKit without changing this project.'],
+    ['Exit', 'Close BasedKit without changing this project.'],
   ];
   const selected = await selectMenu((index) => {
     title('Project kit launcher');
@@ -178,7 +178,7 @@ async function bundleMenu(provider, catalog) {
 }
 
 function install(provider, target, bundles) {
-  console.log(`Installing BaseKit for ${provider === 'both' ? 'all providers' : provider} in ${target}...`);
+  console.log(`Installing BasedKit for ${provider === 'both' ? 'all providers' : provider} in ${target}...`);
   console.log(`Bundles: ${bundles.join(', ')}`);
   const result = spawnSync(process.execPath, [
     enginePath,
@@ -192,7 +192,7 @@ function install(provider, target, bundles) {
 }
 
 function runBootstrap(state) {
-  const repository = state.repository || 'dat-hoangnguyentuandat/basekit';
+  const repository = state.repository || 'dat-hoangnguyentuandat/basedkit';
   const ref = state.ref || 'main';
   if (!/^[A-Za-z0-9_.-]+\/[A-Za-z0-9_.-]+$/.test(repository)) throw new Error('Invalid update repository');
   if (!/^[A-Za-z0-9._/-]+$/.test(ref)) throw new Error('Invalid update ref');
@@ -201,9 +201,9 @@ function runBootstrap(state) {
   const result = process.platform === 'win32'
     ? spawnSync('powershell.exe', [
       '-NoProfile', '-ExecutionPolicy', 'Bypass', '-Command',
-      `$env:BASEKIT_REPOSITORY='${repository}'; $env:BASEKIT_REF='${ref}'; $script = Invoke-RestMethod '${url}'; Invoke-Expression $script`,
+      `$env:BASEDKIT_REPOSITORY='${repository}'; $env:BASEDKIT_REF='${ref}'; $script = Invoke-RestMethod '${url}'; Invoke-Expression $script`,
     ], { stdio: 'inherit' })
-    : spawnSync('sh', ['-c', 'curl -fsSL "$1" | sh', 'basekit-update', url], { stdio: 'inherit' });
+    : spawnSync('sh', ['-c', 'curl -fsSL "$1" | sh', 'basedkit-update', url], { stdio: 'inherit' });
   if (result.error) throw result.error;
   if (result.status !== 0) throw new Error(`Update installer exited with code ${result.status}`);
 }
@@ -214,7 +214,7 @@ async function updatePage(initialState) {
   while (true) {
     const actions = state.status === 'available' ? ['Update Now', 'Check Again', 'Back'] : ['Check Again', 'Back'];
     const selected = await selectMenu((index) => {
-      title('BaseKit update');
+      title('BasedKit update');
       console.log(`  Status: ${updateSummary(state)}\n`);
       actions.forEach((label, itemIndex) => menuLine(`${itemIndex + 1}. ${label}`, index === itemIndex));
       if (message) console.log(`\n  ${message}`);
@@ -226,7 +226,7 @@ async function updatePage(initialState) {
       state = await checkForUpdate({ sourceRoot, force: true });
       message = null;
     } else {
-      title('BaseKit update');
+      title('BasedKit update');
       console.log('  Downloading and installing the latest revision...\n');
       runBootstrap(state);
       state = await checkForUpdate({ sourceRoot, force: true });
@@ -255,7 +255,7 @@ async function interactiveLauncher(target) {
     if (!bundles) continue;
     clear();
     install(action, target, bundles);
-    await pause('BaseKit installation complete. Restart the provider if it is already running.');
+    await pause('BasedKit installation complete. Restart the provider if it is already running.');
   }
 }
 
@@ -264,13 +264,13 @@ async function handleDirectUpdate({ checkOnly = false } = {}) {
   console.log(updateSummary(state));
   if (checkOnly || state.status === 'current') return;
   runBootstrap(state);
-  console.log('BaseKit updated. Run basekit again to use the new launcher.');
+  console.log('BasedKit updated. Run basedkit again to use the new launcher.');
 }
 
 async function main() {
   const options = parseArgs(process.argv.slice(2));
   if (['help', '-h', '--help'].includes(options.command) || options.flags.has('--help') || options.flags.has('-h')) return printHelp();
-  if (['version', '-v', '--version'].includes(options.command) || options.flags.has('--version') || options.flags.has('-v')) return console.log(`basekit ${VERSION}`);
+  if (['version', '-v', '--version'].includes(options.command) || options.flags.has('--version') || options.flags.has('-v')) return console.log(`basedkit ${VERSION}`);
   if (options.command === 'update') return handleDirectUpdate({ checkOnly: options.flags.has('--check') });
   if (!options.command) return interactiveLauncher(options.target);
   const provider = options.command === 'all' ? 'both' : options.command;
@@ -287,6 +287,6 @@ async function main() {
 
 main().catch((error) => {
   process.stdout.write('\x1b[0m');
-  console.error(`BaseKit launcher failed: ${error.message}`);
+  console.error(`BasedKit launcher failed: ${error.message}`);
   process.exit(1);
 });

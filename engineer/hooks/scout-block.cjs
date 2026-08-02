@@ -2,7 +2,7 @@
 /**
  * scout-block.cjs - Cross-platform hook for blocking directory access
  *
- * Blocks access to directories listed in .claude/.bkignore
+ * Blocks access to directories listed in .claude/.basedkitignore
  * Uses gitignore-spec compliant pattern matching via 'ignore' package
  *
  * Blocking Rules:
@@ -12,7 +12,7 @@
  *   - Allowed: npm build, go build, cargo build, make, mvn, gradle, docker build, kubectl, terraform
  *
  * Configuration:
- * - Edit .claude/.bkignore to customize blocked patterns (one per line, # for comments)
+ * - Edit .claude/.basedkitignore to customize blocked patterns (one per line, # for comments)
  * - Supports negation patterns (!) to allow specific paths
  *
  * Exit Codes:
@@ -32,7 +32,7 @@ const {
   isVenvExecutable,
   isAllowedCommand
 } = require('./lib/scout-checker.cjs');
-const { isHookEnabled } = require('./lib/bk-config-utils.cjs');
+const { isHookEnabled } = require('./lib/basedkit-config-utils.cjs');
 
 // Early exit if hook disabled in config
 if (!isHookEnabled('scout-block')) {
@@ -80,7 +80,7 @@ try {
     toolInput,
     options: {
       claudeDir,
-      bkignorePath: path.join(claudeDir, '.bkignore'),
+      basedkitignorePath: path.join(claudeDir, '.basedkitignore'),
       checkBroadPatterns: true
     }
   });

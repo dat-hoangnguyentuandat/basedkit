@@ -22,7 +22,7 @@ const {
   resolveNamingPattern,
   extractTaskListId,
   isHookEnabled
-} = require('./lib/bk-config-utils.cjs');
+} = require('./lib/basedkit-config-utils.cjs');
 
 // Early exit if hook disabled in config
 if (!isHookEnabled('session-init')) {
@@ -109,20 +109,20 @@ async function main() {
 
     if (envFile) {
       // Session & plan config
-      writeEnv(envFile, 'BK_SESSION_ID', sessionId || '');
-      writeEnv(envFile, 'BK_PLAN_NAMING_FORMAT', config.plan.namingFormat);
-      writeEnv(envFile, 'BK_PLAN_DATE_FORMAT', config.plan.dateFormat);
-      writeEnv(envFile, 'BK_PLAN_ISSUE_PREFIX', config.plan.issuePrefix || '');
-      writeEnv(envFile, 'BK_PLAN_REPORTS_DIR', config.plan.reportsDir);
+      writeEnv(envFile, 'BASEDKIT_SESSION_ID', sessionId || '');
+      writeEnv(envFile, 'BASEDKIT_PLAN_NAMING_FORMAT', config.plan.namingFormat);
+      writeEnv(envFile, 'BASEDKIT_PLAN_DATE_FORMAT', config.plan.dateFormat);
+      writeEnv(envFile, 'BASEDKIT_PLAN_ISSUE_PREFIX', config.plan.issuePrefix || '');
+      writeEnv(envFile, 'BASEDKIT_PLAN_REPORTS_DIR', config.plan.reportsDir);
 
       // NEW: Resolved naming pattern for DRY file naming in agents
       // Example: "251212-1830-GH-88-{slug}" or "251212-1830-{slug}"
-      // Agents use: `{agent-type}-$BK_NAME_PATTERN.md` and substitute {slug}
-      writeEnv(envFile, 'BK_NAME_PATTERN', namePattern);
+      // Agents use: `{agent-type}-$BASEDKIT_NAME_PATTERN.md` and substitute {slug}
+      writeEnv(envFile, 'BASEDKIT_NAME_PATTERN', namePattern);
 
       // Plan resolution
-      writeEnv(envFile, 'BK_ACTIVE_PLAN', resolved.resolvedBy === 'session' ? resolved.path : '');
-      writeEnv(envFile, 'BK_SUGGESTED_PLAN', resolved.resolvedBy === 'branch' ? resolved.path : '');
+      writeEnv(envFile, 'BASEDKIT_ACTIVE_PLAN', resolved.resolvedBy === 'session' ? resolved.path : '');
+      writeEnv(envFile, 'BASEDKIT_SUGGESTED_PLAN', resolved.resolvedBy === 'branch' ? resolved.path : '');
 
       // Claude Code Tasks integration - enables multi-session/subagent coordination
       // Task list ID = plan directory name (shared across all sessions working on same plan)
@@ -131,47 +131,47 @@ async function main() {
       }
 
       // Paths - use absolute paths based on CWD for subdirectory workflow support (Issue #327)
-      writeEnv(envFile, 'BK_GIT_ROOT', staticEnv.gitRoot || '');
-      writeEnv(envFile, 'BK_REPORTS_PATH', path.join(baseDir, reportsPath));
-      writeEnv(envFile, 'BK_DOCS_PATH', path.join(baseDir, config.paths.docs));
-      writeEnv(envFile, 'BK_PLANS_PATH', path.join(baseDir, config.paths.plans));
-      writeEnv(envFile, 'BK_PROJECT_ROOT', process.cwd());
+      writeEnv(envFile, 'BASEDKIT_GIT_ROOT', staticEnv.gitRoot || '');
+      writeEnv(envFile, 'BASEDKIT_REPORTS_PATH', path.join(baseDir, reportsPath));
+      writeEnv(envFile, 'BASEDKIT_DOCS_PATH', path.join(baseDir, config.paths.docs));
+      writeEnv(envFile, 'BASEDKIT_PLANS_PATH', path.join(baseDir, config.paths.plans));
+      writeEnv(envFile, 'BASEDKIT_PROJECT_ROOT', process.cwd());
 
       // Project detection
-      writeEnv(envFile, 'BK_PROJECT_TYPE', detections.type || '');
-      writeEnv(envFile, 'BK_PACKAGE_MANAGER', detections.pm || '');
-      writeEnv(envFile, 'BK_FRAMEWORK', detections.framework || '');
+      writeEnv(envFile, 'BASEDKIT_PROJECT_TYPE', detections.type || '');
+      writeEnv(envFile, 'BASEDKIT_PACKAGE_MANAGER', detections.pm || '');
+      writeEnv(envFile, 'BASEDKIT_FRAMEWORK', detections.framework || '');
 
       // NEW: Static environment info (so other hooks don't need to recompute)
-      writeEnv(envFile, 'BK_NODE_VERSION', staticEnv.nodeVersion);
-      writeEnv(envFile, 'BK_PYTHON_VERSION', staticEnv.pythonVersion || '');
-      writeEnv(envFile, 'BK_OS_PLATFORM', staticEnv.osPlatform);
-      writeEnv(envFile, 'BK_GIT_URL', staticEnv.gitUrl || '');
-      writeEnv(envFile, 'BK_GIT_BRANCH', staticEnv.gitBranch || '');
-      writeEnv(envFile, 'BK_USER', staticEnv.user);
-      writeEnv(envFile, 'BK_LOCALE', staticEnv.locale);
-      writeEnv(envFile, 'BK_TIMEZONE', staticEnv.timezone);
-      writeEnv(envFile, 'BK_CLAUDE_SETTINGS_DIR', staticEnv.claudeSettingsDir);
+      writeEnv(envFile, 'BASEDKIT_NODE_VERSION', staticEnv.nodeVersion);
+      writeEnv(envFile, 'BASEDKIT_PYTHON_VERSION', staticEnv.pythonVersion || '');
+      writeEnv(envFile, 'BASEDKIT_OS_PLATFORM', staticEnv.osPlatform);
+      writeEnv(envFile, 'BASEDKIT_GIT_URL', staticEnv.gitUrl || '');
+      writeEnv(envFile, 'BASEDKIT_GIT_BRANCH', staticEnv.gitBranch || '');
+      writeEnv(envFile, 'BASEDKIT_USER', staticEnv.user);
+      writeEnv(envFile, 'BASEDKIT_LOCALE', staticEnv.locale);
+      writeEnv(envFile, 'BASEDKIT_TIMEZONE', staticEnv.timezone);
+      writeEnv(envFile, 'BASEDKIT_CLAUDE_SETTINGS_DIR', staticEnv.claudeSettingsDir);
 
       // Locale config
       if (config.locale?.thinkingLanguage) {
-        writeEnv(envFile, 'BK_THINKING_LANGUAGE', config.locale.thinkingLanguage);
+        writeEnv(envFile, 'BASEDKIT_THINKING_LANGUAGE', config.locale.thinkingLanguage);
       }
       if (config.locale?.responseLanguage) {
-        writeEnv(envFile, 'BK_RESPONSE_LANGUAGE', config.locale.responseLanguage);
+        writeEnv(envFile, 'BASEDKIT_RESPONSE_LANGUAGE', config.locale.responseLanguage);
       }
 
       // Plan validation config (for /plan:validate, /plan:hard, /plan:parallel)
       const validation = config.plan?.validation || {};
-      writeEnv(envFile, 'BK_VALIDATION_MODE', validation.mode || 'prompt');
-      writeEnv(envFile, 'BK_VALIDATION_MIN_QUESTIONS', validation.minQuestions || 3);
-      writeEnv(envFile, 'BK_VALIDATION_MAX_QUESTIONS', validation.maxQuestions || 8);
-      writeEnv(envFile, 'BK_VALIDATION_FOCUS_AREAS', (validation.focusAreas || ['assumptions', 'risks', 'tradeoffs', 'architecture']).join(','));
+      writeEnv(envFile, 'BASEDKIT_VALIDATION_MODE', validation.mode || 'prompt');
+      writeEnv(envFile, 'BASEDKIT_VALIDATION_MIN_QUESTIONS', validation.minQuestions || 3);
+      writeEnv(envFile, 'BASEDKIT_VALIDATION_MAX_QUESTIONS', validation.maxQuestions || 8);
+      writeEnv(envFile, 'BASEDKIT_VALIDATION_FOCUS_AREAS', (validation.focusAreas || ['assumptions', 'risks', 'tradeoffs', 'architecture']).join(','));
 
       // Coding level config (for output style selection)
       const codingLevel = config.codingLevel ?? 5;
-      writeEnv(envFile, 'BK_CODING_LEVEL', codingLevel);
-      writeEnv(envFile, 'BK_CODING_LEVEL_STYLE', getCodingLevelStyleName(codingLevel));
+      writeEnv(envFile, 'BASEDKIT_CODING_LEVEL', codingLevel);
+      writeEnv(envFile, 'BASEDKIT_CODING_LEVEL_STYLE', getCodingLevelStyleName(codingLevel));
     }
 
     console.log(`Session ${source}. ${buildContextOutput(config, detections, resolved, staticEnv.gitRoot)}`);

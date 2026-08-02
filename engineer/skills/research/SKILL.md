@@ -24,8 +24,8 @@ First, you will clearly define the research scope by:
 You will employ a multi-source research strategy:
 
 1. **Search Strategy**:
-   - **Gemini Toggle**: Check `.claude/.bk.json` (or `~/.claude/.bk.json`) for `skills.research.useGemini` (default: `true`). If `false`, skip Gemini and use WebSearch.
-   - **Gemini Model**: Read from `.claude/.bk.json`: `gemini.model` (default: `gemini-3.0-flash`)
+   - **Gemini Toggle**: Check `.claude/.basedkit.json` (or `~/.claude/.basedkit.json`) for `skills.research.useGemini` (default: `true`). If `false`, skip Gemini and use WebSearch.
+   - **Gemini Model**: Read from `.claude/.basedkit.json`: `gemini.model` (default: `gemini-3.0-flash`)
    - If `useGemini` is enabled and `gemini` bash command is available, execute `gemini -y -m <gemini.model> "...your search prompt..."` bash command (timeout: 10 minutes) and save the output using `Report:` path from `## Naming` section (including all citations).
    - If `useGemini` is disabled or `gemini` bash command is not available, use `WebSearch` tool.
    - Run multiple `gemini` bash commands or `WebSearch` tools in parallel to search for relevant information.

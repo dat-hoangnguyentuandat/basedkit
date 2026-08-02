@@ -9,7 +9,7 @@ Execute MCP operations via **Gemini CLI** to preserve context budget.
 1. **Execute task via Gemini CLI** (using stdin pipe for MCP support):
    ```bash
    # IMPORTANT: Use stdin piping, NOT -p flag (deprecated, skips MCP init)
-   # Read model from .claude/.bk.json: gemini.model (default: gemini-3.0-flash)
+   # Read model from .claude/.basedkit.json: gemini.model (default: gemini-3.0-flash)
    echo "$ARGUMENTS. Return JSON only per GEMINI.md instructions." | gemini -y -m <gemini.model>
    ```
 

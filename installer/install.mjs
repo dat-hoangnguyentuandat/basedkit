@@ -6,6 +6,7 @@ import { chmod, mkdir, readFile, readdir, rmdir, stat, unlink, writeFile } from 
 import path from 'node:path';
 
 const MANIFEST_VERSION = 1;
+const LEGACY_PRODUCT_ID = ['base', 'kit'].join('');
 const EXCLUDED_SOURCE_PATHS = [
   '.claude',
   'metadata.json',
@@ -96,16 +97,16 @@ function transformCodexText(content) {
     .replaceAll('~/.claude/skills', '.agents/skills')
     .replaceAll('./.claude/skills', './.agents/skills')
     .replaceAll('.claude/skills', '.agents/skills')
-    .replaceAll('./.claude/rules', './.codex/basekit/rules')
-    .replaceAll('.claude/rules', '.codex/basekit/rules')
-    .replaceAll('./.claude/workflows', './.codex/basekit/workflows')
-    .replaceAll('.claude/workflows', '.codex/basekit/workflows')
-    .replaceAll('./.claude/scripts', './.codex/basekit/scripts')
-    .replaceAll('.claude/scripts', '.codex/basekit/scripts')
-    .replaceAll('./.claude/hooks', './.codex/basekit/hooks')
-    .replaceAll('.claude/hooks', '.codex/basekit/hooks')
-    .replaceAll('.claude/.bk.json', '.codex/basekit/.bk.json')
-    .replaceAll('.claude/.env', '.codex/basekit/.env');
+    .replaceAll('./.claude/rules', './.codex/basedkit/rules')
+    .replaceAll('.claude/rules', '.codex/basedkit/rules')
+    .replaceAll('./.claude/workflows', './.codex/basedkit/workflows')
+    .replaceAll('.claude/workflows', '.codex/basedkit/workflows')
+    .replaceAll('./.claude/scripts', './.codex/basedkit/scripts')
+    .replaceAll('.claude/scripts', '.codex/basedkit/scripts')
+    .replaceAll('./.claude/hooks', './.codex/basedkit/hooks')
+    .replaceAll('.claude/hooks', '.codex/basedkit/hooks')
+    .replaceAll('.claude/.basedkit.json', '.codex/basedkit/.basedkit.json')
+    .replaceAll('.claude/.env', '.codex/basedkit/.env');
 }
 
 function maybeTransformCodex(buffer, sourceRelative) {
@@ -115,9 +116,10 @@ function maybeTransformCodex(buffer, sourceRelative) {
 }
 
 class ManagedInstaller {
-  constructor(targetRoot, manifestPath, provider, bundles) {
+  constructor(targetRoot, manifestPath, provider, bundles, legacyManifestPath = null) {
     this.targetRoot = targetRoot;
     this.manifestPath = manifestPath;
+    this.legacyManifestPath = legacyManifestPath;
     this.provider = provider;
     this.previous = { files: {} };
     this.next = { version: MANIFEST_VERSION, provider, bundles, files: {} };
@@ -125,7 +127,8 @@ class ManagedInstaller {
   }
 
   async initialize() {
-    this.previous = await readJson(this.manifestPath, { files: {} });
+    const previousPath = existsSync(this.manifestPath) ? this.manifestPath : this.legacyManifestPath;
+    this.previous = previousPath ? await readJson(previousPath, { files: {} }) : { files: {} };
   }
 
   async installBuffer(targetRelative, content, sourceMode = 0o644) {
@@ -196,6 +199,11 @@ class ManagedInstaller {
   async save() {
     await this.removeStaleFiles();
     await writeJson(this.manifestPath, this.next);
+    if (this.legacyManifestPath && existsSync(this.legacyManifestPath)) {
+      await unlink(this.legacyManifestPath);
+      const legacyDirectory = path.dirname(this.legacyManifestPath);
+      if ((await readdir(legacyDirectory)).length === 0) await rmdir(legacyDirectory);
+    }
   }
 }
 
@@ -228,20 +236,26 @@ function slugify(value) {
     .slice(0, 96) || `agent_${sha256(value).slice(0, 8)}`;
 }
 
-function replaceMarkedBlock(original, start, end, block) {
-  const begin = original.indexOf(start);
-  const finish = original.indexOf(end);
+function replaceMarkedBlock(original, start, end, block, legacyStart = null, legacyEnd = null) {
+  let begin = original.indexOf(start);
+  let finish = original.indexOf(end);
+  let matchedEnd = end;
+  if (begin === -1 && legacyStart && legacyEnd) {
+    begin = original.indexOf(legacyStart);
+    finish = original.indexOf(legacyEnd);
+    matchedEnd = legacyEnd;
+  }
   const rendered = `${start}\n${block.trim()}\n${end}`;
   if (begin !== -1 && finish > begin) {
-    return `${original.slice(0, begin)}${rendered}${original.slice(finish + end.length)}`;
+    return `${original.slice(0, begin)}${rendered}${original.slice(finish + matchedEnd.length)}`;
   }
   return `${original.trimEnd()}${original.trim() ? '\n\n' : ''}${rendered}\n`;
 }
 
-async function mergeTextFile(filePath, start, end, block) {
+async function mergeTextFile(filePath, start, end, block, legacyStart = null, legacyEnd = null) {
   const original = existsSync(filePath) ? await readFile(filePath, 'utf8') : '';
   await mkdir(path.dirname(filePath), { recursive: true });
-  await writeFile(filePath, replaceMarkedBlock(original, start, end, block), 'utf8');
+  await writeFile(filePath, replaceMarkedBlock(original, start, end, block, legacyStart, legacyEnd), 'utf8');
 }
 
 function hookEntry(matcher, commands) {
@@ -303,9 +317,10 @@ async function installClaude(engineerRoot, targetRoot, bundles, bundleIds) {
   await mkdir(claudeRoot, { recursive: true });
   const managed = new ManagedInstaller(
     targetRoot,
-    path.join(claudeRoot, '.basekit', 'manifest.json'),
+    path.join(claudeRoot, '.basedkit', 'manifest.json'),
     'claude',
     bundleIds,
+    path.join(claudeRoot, `.${LEGACY_PRODUCT_ID}`, 'manifest.json'),
   );
   await managed.initialize();
   for (const relative of await listFiles(engineerRoot)) {
@@ -322,9 +337,9 @@ async function buildCodexInstructions(engineerRoot) {
   const sections = ['workflows/development-rules.md', 'workflows/primary-workflow.md',
     'workflows/orchestration-protocol.md', 'workflows/documentation-management.md',
     'rules/console-url-handling.md'];
-  const content = ['# BaseKit Engineer', '',
+  const content = ['# BasedKit Engineer', '',
     'Use skills from `.agents/skills` when their descriptions match the task.',
-    'BaseKit support files are stored under `.codex/basekit`.'];
+    'BasedKit support files are stored under `.codex/basedkit`.'];
   for (const relative of sections) {
     const filePath = path.join(engineerRoot, relative);
     if (existsSync(filePath)) content.push('', transformCodexText(await readFile(filePath, 'utf8')));
@@ -337,9 +352,10 @@ async function installCodex(engineerRoot, targetRoot, bundles, bundleIds) {
   await mkdir(codexRoot, { recursive: true });
   const managed = new ManagedInstaller(
     targetRoot,
-    path.join(codexRoot, '.basekit', 'manifest.json'),
+    path.join(codexRoot, '.basedkit', 'manifest.json'),
     'codex',
     bundleIds,
+    path.join(codexRoot, `.${LEGACY_PRODUCT_ID}`, 'manifest.json'),
   );
   await managed.initialize();
 
@@ -359,7 +375,7 @@ async function installCodex(engineerRoot, targetRoot, bundles, bundleIds) {
     } else {
       await managed.installFile(
         path.join(engineerRoot, relative),
-        path.join('.codex', 'basekit', relative),
+        path.join('.codex', 'basedkit', relative),
         (buffer) => maybeTransformCodex(buffer, normalized),
       );
     }
@@ -383,10 +399,10 @@ async function installCodex(engineerRoot, targetRoot, bundles, bundleIds) {
     if (!relative.toLowerCase().endsWith('.md')) continue;
     const normalized = normalizeRelative(relative).slice('commands/'.length).replace(/\.md$/i, '');
     const segments = normalized.split('/');
-    const skillName = `bk-${segments.join('-')}`.toLowerCase().replace(/[^a-z0-9_-]+/g, '-');
+    const skillName = `basedkit-${segments.join('-')}`.toLowerCase().replace(/[^a-z0-9_-]+/g, '-');
     const markdown = await readFile(path.join(engineerRoot, relative), 'utf8');
     const parsed = parseFrontmatter(markdown, segments.join('-'));
-    const description = (parsed.attributes.description || `Run the BaseKit ${segments.join(':')} workflow`)
+    const description = (parsed.attributes.description || `Run the BasedKit ${segments.join(':')} workflow`)
       .replace(/\s+/g, ' ').slice(0, 1024);
     const body = transformCodexText(parsed.body.trim()).replaceAll('$ARGUMENTS', '{{args}}');
     const skill = [
@@ -397,7 +413,7 @@ async function installCodex(engineerRoot, targetRoot, bundles, bundleIds) {
       '',
       `# ${skillName}`,
       '',
-      `Use this skill for the BaseKit command \`/${segments.join(':')}\`.`,
+      `Use this skill for the BasedKit command \`/${segments.join(':')}\`.`,
       '',
       body,
       '',
@@ -415,15 +431,19 @@ async function installCodex(engineerRoot, targetRoot, bundles, bundleIds) {
   ].join('\n')).join('\n\n');
   await mergeTextFile(
     path.join(codexRoot, 'config.toml'),
-    '# >>> basekit agents >>>',
-    '# <<< basekit agents <<<',
+    '# >>> basedkit agents >>>',
+    '# <<< basedkit agents <<<',
     configBlock,
+    `# >>> ${LEGACY_PRODUCT_ID} agents >>>`,
+    `# <<< ${LEGACY_PRODUCT_ID} agents <<<`,
   );
   await mergeTextFile(
     path.join(targetRoot, 'AGENTS.md'),
-    '<!-- >>> basekit instructions >>>',
-    '<!-- <<< basekit instructions <<< -->',
+    '<!-- >>> basedkit instructions >>>',
+    '<!-- <<< basedkit instructions <<< -->',
     await buildCodexInstructions(engineerRoot),
+    `<!-- >>> ${LEGACY_PRODUCT_ID} instructions >>>`,
+    `<!-- <<< ${LEGACY_PRODUCT_ID} instructions <<< -->`,
   );
   await managed.save();
   return managed.summary;
@@ -453,6 +473,6 @@ async function main() {
 }
 
 main().catch((error) => {
-  console.error(`BaseKit installation failed: ${error.message}`);
+  console.error(`BasedKit installation failed: ${error.message}`);
   process.exit(1);
 });

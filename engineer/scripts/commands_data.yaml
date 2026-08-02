@@ -1,361 +1,361 @@
-- name: /bk:ask
+- name: /basedkit:ask
   path: ask.md
   description: Answer technical and architectural questions.
   argument_hint:
   - technical-question
   power_level: 1
   category: core
-- name: /bk:bootstrap:auto:fast
+- name: /basedkit:bootstrap:auto:fast
   path: bootstrap/auto/fast.md
   description: Quickly bootstrap a new project automatically
   argument_hint:
   - user-requirements
   power_level: 3
   category: bootstrap
-- name: /bk:bootstrap:auto
+- name: /basedkit:bootstrap:auto
   path: bootstrap/auto.md
   description: Bootstrap a new project automatically
   argument_hint:
   - user-requirements
   power_level: 4
   category: bootstrap
-- name: /bk:bootstrap
+- name: /basedkit:bootstrap
   path: bootstrap.md
   description: Bootstrap a new project step by step
   argument_hint:
   - user-requirements
   power_level: 5
   category: core
-- name: /bk:brainstorm
+- name: /basedkit:brainstorm
   path: brainstorm.md
   description: Brainstorm a feature
   argument_hint:
   - question
   power_level: 2
   category: core
-- name: /bk:code
+- name: /basedkit:code
   path: code.md
   description: Start coding & testing an existing plan
   argument_hint:
   - plan
   power_level: 1
   category: core
-- name: /bk:content:cro
+- name: /basedkit:content:cro
   path: content/cro.md
   description: Analyze the current content and optimize for conversion
   argument_hint:
   - issues
   power_level: 0
   category: content
-- name: /bk:content:enhance
+- name: /basedkit:content:enhance
   path: content/enhance.md
   description: Analyze the current copy issues and enhance it
   argument_hint:
   - issues
   power_level: 0
   category: content
-- name: /bk:content:fast
+- name: /basedkit:content:fast
   path: content/fast.md
   description: Write creative & smart copy [FAST]
   argument_hint:
   - user-request
   power_level: 0
   category: content
-- name: /bk:content:good
+- name: /basedkit:content:good
   path: content/good.md
   description: Write good creative & smart copy [GOOD]
   argument_hint:
   - user-request
   power_level: 0
   category: content
-- name: /bk:cook:auto:fast
+- name: /basedkit:cook:auto:fast
   path: cook/auto/fast.md
   description: No research. Only scout, plan & implement ["trust me bro"]
   argument_hint:
   - tasks-or-prompt
   power_level: 1
   category: cook
-- name: /bk:cook:auto
+- name: /basedkit:cook:auto
   path: cook/auto.md
   description: Implement a feature automatically ("trust me bro")
   argument_hint:
   - tasks
   power_level: 2
   category: cook
-- name: /bk:cook
+- name: /basedkit:cook
   path: cook.md
   description: Implement a feature [step by step]
   argument_hint:
   - tasks
   power_level: 3
   category: core
-- name: /bk:debug
+- name: /basedkit:debug
   path: debug.md
   description: Debugging technical issues and providing solutions.
   argument_hint:
   - issues
   power_level: 2
   category: core
-- name: /bk:design:3d
+- name: /basedkit:design:3d
   path: design/3d.md
   description: Create immersive interactive 3D designs with Three.js
   argument_hint:
   - tasks
   power_level: 0
   category: design
-- name: /bk:design:describe
+- name: /basedkit:design:describe
   path: design/describe.md
   description: Describe a design based on screenshot/video
   argument_hint:
   - screenshot
   power_level: 0
   category: design
-- name: /bk:design:fast
+- name: /basedkit:design:fast
   path: design/fast.md
   description: Create a quick design
   argument_hint:
   - tasks
   power_level: 0
   category: design
-- name: /bk:design:good
+- name: /basedkit:design:good
   path: design/good.md
   description: Create an immersive design
   argument_hint:
   - tasks
   power_level: 0
   category: design
-- name: /bk:design:screenshot
+- name: /basedkit:design:screenshot
   path: design/screenshot.md
   description: Create a design based on screenshot
   argument_hint:
   - screenshot
   power_level: 0
   category: design
-- name: /bk:design:video
+- name: /basedkit:design:video
   path: design/video.md
   description: Create a design based on video
   argument_hint:
   - video
   power_level: 0
   category: design
-- name: /bk:docs:init
+- name: /basedkit:docs:init
   path: docs/init.md
   description: Analyze the codebase and create initial documentation
   argument_hint: ''
   power_level: 4
   category: docs
-- name: /bk:docs:summarize
+- name: /basedkit:docs:summarize
   path: docs/summarize.md
   description: ''
   argument_hint: ''
   power_level: 0
   category: docs
-- name: /bk:docs:update
+- name: /basedkit:docs:update
   path: docs/update.md
   description: Analyze the codebase and update documentation
   argument_hint: ''
   power_level: 3
   category: docs
-- name: /bk:fix:ci
+- name: /basedkit:fix:ci
   path: fix/ci.md
   description: Analyze Github Actions logs and fix issues
   argument_hint:
   - github-actions-url
   power_level: 1
   category: fix
-- name: /bk:fix:fast
+- name: /basedkit:fix:fast
   path: fix/fast.md
   description: Analyze and fix small issues [FAST]
   argument_hint:
   - issues
   power_level: 1
   category: fix
-- name: /bk:fix:hard
+- name: /basedkit:fix:hard
   path: fix/hard.md
   description: Use subagents to plan and fix hard issues
   argument_hint:
   - issues
   power_level: 3
   category: fix
-- name: /bk:fix:logs
+- name: /basedkit:fix:logs
   path: fix/logs.md
   description: Analyze logs and fix issues
   argument_hint:
   - issue
   power_level: 1
   category: fix
-- name: /bk:fix:test
+- name: /basedkit:fix:test
   path: fix/test.md
   description: Run test suite and fix issues
   argument_hint:
   - issues
   power_level: 2
   category: fix
-- name: /bk:fix:types
+- name: /basedkit:fix:types
   path: fix/types.md
   description: Fix type errors
   argument_hint: ''
   power_level: 1
   category: fix
-- name: /bk:fix:ui
+- name: /basedkit:fix:ui
   path: fix/ui.md
   description: Analyze and fix UI issues
   argument_hint:
   - issue
   power_level: 2
   category: fix
-- name: /bk:fix
+- name: /basedkit:fix
   path: fix.md
   description: Analyze and fix small issues [AUTO DETECT COMPLEXITY]
   argument_hint:
   - issues
   power_level: 2
   category: core
-- name: /bk:git:cm
+- name: /basedkit:git:cm
   path: git/cm.md
   description: Stage all files and create a commit.
   argument_hint: ''
   power_level: 0
   category: git
-- name: /bk:git:cp
+- name: /basedkit:git:cp
   path: git/cp.md
   description: Stage, commit and push all code in the current branch
   argument_hint: ''
   power_level: 0
   category: git
-- name: /bk:git:pr
+- name: /basedkit:git:pr
   path: git/pr.md
   description: ''
   argument_hint: ''
   power_level: 0
   category: git
-- name: /bk:integrate:polar
+- name: /basedkit:integrate:polar
   path: integrate/polar.md
   description: Implement payment integration with Polar.sh
   argument_hint:
   - tasks
   power_level: 2
   category: integrate
-- name: /bk:integrate:sepay
+- name: /basedkit:integrate:sepay
   path: integrate/sepay.md
   description: Implement payment integration with SePay.vn
   argument_hint:
   - tasks
   power_level: 2
   category: integrate
-- name: /bk:journal
+- name: /basedkit:journal
   path: journal.md
   description: Write some journal entries.
   argument_hint: ''
   power_level: 1
   category: core
-- name: /bk:plan:ci
+- name: /basedkit:plan:ci
   path: plan/ci.md
   description: Analyze Github Actions logs and provide a plan to fix the issues
   argument_hint:
   - github-actions-url
   power_level: 0
   category: plan
-- name: /bk:plan:cro
+- name: /basedkit:plan:cro
   path: plan/cro.md
   description: Create a CRO plan for the given content
   argument_hint:
   - issues
   power_level: 0
   category: plan
-- name: /bk:plan:fast
+- name: /basedkit:plan:fast
   path: plan/fast.md
   description: No research. Only analyze and create an implementation plan
   argument_hint:
   - task
   power_level: 2
   category: plan
-- name: /bk:plan:hard
+- name: /basedkit:plan:hard
   path: plan/hard.md
   description: Research, analyze, and create an implementation plan
   argument_hint:
   - task
   power_level: 3
   category: plan
-- name: /bk:plan:two
+- name: /basedkit:plan:two
   path: plan/two.md
   description: Research & create an implementation plan with 2 approaches
   argument_hint:
   - task
   power_level: 4
   category: plan
-- name: /bk:plan
+- name: /basedkit:plan
   path: plan.md
   description: Intelligent plan creation with prompt enhancement
   argument_hint:
   - task
   power_level: 3
   category: core
-- name: /bk:review:codebase
+- name: /basedkit:review:codebase
   path: review/codebase.md
   description: Scan & analyze the codebase.
   argument_hint:
   - tasks-or-prompt
   power_level: 3
   category: review
-- name: /bk:scout:ext
+- name: /basedkit:scout:ext
   path: scout/ext.md
   description: ''
   argument_hint: ''
   power_level: 0
   category: scout
-- name: /bk:scout
+- name: /basedkit:scout
   path: scout.md
   description: ''
   argument_hint: ''
   power_level: 0
   category: core
-- name: /bk:skill:add
+- name: /basedkit:skill:add
   path: skill/add.md
   description: ''
   argument_hint: ''
   power_level: 0
   category: skill
-- name: /bk:skill:create
+- name: /basedkit:skill:create
   path: skill/create.md
   description: Create a new agent skill
   argument_hint:
   - prompt-or-llms-or-github-url
   power_level: 0
   category: skill
-- name: /bk:skill:fix-logs
+- name: /basedkit:skill:fix-logs
   path: skill/fix-logs.md
   description: Fix the agent skill based on `logs.txt` file.
   argument_hint:
   - prompt-or-path-to-skill
   power_level: 0
   category: skill
-- name: /bk:skill:optimize:auto
+- name: /basedkit:skill:optimize:auto
   path: skill/optimize/auto.md
   description: ''
   argument_hint: ''
   power_level: 0
   category: skill
-- name: /bk:skill:optimize
+- name: /basedkit:skill:optimize
   path: skill/optimize.md
   description: ''
   argument_hint: ''
   power_level: 0
   category: skill
-- name: /bk:test
+- name: /basedkit:test
   path: test.md
   description: Run tests locally and analyze the summary report.
   argument_hint: ''
   power_level: 1
   category: core
-- name: /bk:use-mcp
+- name: /basedkit:use-mcp
   path: use-mcp.md
   description: Utilize tools of Model Context Protocol (MCP) servers
   argument_hint:
   - task
   power_level: 0
   category: core
-- name: /bk:watzup
+- name: /basedkit:watzup
   path: watzup.md
   description: Review recent changes and wrap up the work
   argument_hint: ''

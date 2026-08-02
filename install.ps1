@@ -1,15 +1,15 @@
 [CmdletBinding()]
 param(
-    [string]$Ref = $(if ($env:BASEKIT_REF) { $env:BASEKIT_REF } else { 'main' }),
-    [string]$InstallRoot = $(if ($env:BASEKIT_HOME) { $env:BASEKIT_HOME } else { Join-Path $env:LOCALAPPDATA 'BaseKit' }),
-    [string]$SourceDir = $env:BASEKIT_SOURCE_DIR,
+    [string]$Ref = $(if ($env:BASEDKIT_REF) { $env:BASEDKIT_REF } else { 'main' }),
+    [string]$InstallRoot = $(if ($env:BASEDKIT_HOME) { $env:BASEDKIT_HOME } else { Join-Path $env:LOCALAPPDATA 'BasedKit' }),
+    [string]$SourceDir = $env:BASEDKIT_SOURCE_DIR,
     [switch]$NoPathUpdate
 )
 
 $ErrorActionPreference = 'Stop'
-$repository = if ($env:BASEKIT_REPOSITORY) { $env:BASEKIT_REPOSITORY } else { 'dat-hoangnguyentuandat/basekit' }
+$repository = if ($env:BASEDKIT_REPOSITORY) { $env:BASEDKIT_REPOSITORY } else { 'dat-hoangnguyentuandat/basedkit' }
 $tempDir = $null
-$resolvedCommit = $env:BASEKIT_COMMIT
+$resolvedCommit = $env:BASEDKIT_COMMIT
 
 if (-not (Get-Command node -ErrorAction SilentlyContinue)) {
     throw 'Node.js 18 or newer is required.'
@@ -24,16 +24,16 @@ try {
                 $commitInfo = Invoke-RestMethod "https://api.github.com/repos/$repository/commits/$Ref" -Headers @{
                     Accept = 'application/vnd.github+json'
                     'X-GitHub-Api-Version' = '2022-11-28'
-                    'User-Agent' = 'basekit-installer'
+                    'User-Agent' = 'basedkit-installer'
                 }
                 $resolvedCommit = $commitInfo.sha
             } catch {
                 Write-Host "Could not resolve the current commit; installing ref '$Ref'." -ForegroundColor Yellow
             }
         }
-        $tempDir = Join-Path ([IO.Path]::GetTempPath()) "basekit-$([guid]::NewGuid())"
+        $tempDir = Join-Path ([IO.Path]::GetTempPath()) "basedkit-$([guid]::NewGuid())"
         New-Item -ItemType Directory -Path $tempDir | Out-Null
-        $archive = Join-Path $tempDir 'basekit.zip'
+        $archive = Join-Path $tempDir 'basedkit.zip'
         $downloadRef = if ($resolvedCommit) { $resolvedCommit } else { $Ref }
         Invoke-WebRequest "https://github.com/$repository/archive/$downloadRef.zip" -OutFile $archive
         Expand-Archive $archive -DestinationPath $tempDir
@@ -56,17 +56,17 @@ try {
         '--app', $appDir,
         '--repository', $repository,
         '--ref', $Ref,
-        '--version', '1.2.0'
+        '--version', '2.0.0'
     )
     if ($resolvedCommit) { $metadataArgs += @('--commit', $resolvedCommit.Trim()) }
     & node @metadataArgs
-    if ($LASTEXITCODE -ne 0) { throw "Could not record BaseKit release metadata (exit $LASTEXITCODE)." }
+    if ($LASTEXITCODE -ne 0) { throw "Could not record BasedKit release metadata (exit $LASTEXITCODE)." }
 
     $binDir = Join-Path $InstallRoot 'bin'
     New-Item -ItemType Directory -Force -Path $binDir | Out-Null
-    $launcher = Join-Path $appDir 'bin\basekit.mjs'
+    $launcher = Join-Path $appDir 'bin\basedkit.mjs'
     $cmd = "@echo off`r`nnode `"$launcher`" %*`r`n"
-    Set-Content -Path (Join-Path $binDir 'basekit.cmd') -Value $cmd -Encoding ascii -NoNewline
+    Set-Content -Path (Join-Path $binDir 'basedkit.cmd') -Value $cmd -Encoding ascii -NoNewline
 
     if (-not $NoPathUpdate) {
         $userPath = [Environment]::GetEnvironmentVariable('Path', 'User')
@@ -77,8 +77,8 @@ try {
         if (($env:Path -split ';') -notcontains $binDir) { $env:Path = "$env:Path;$binDir" }
     }
 
-    Write-Host "BaseKit launcher installed at $(Join-Path $binDir 'basekit.cmd')" -ForegroundColor Green
-    Write-Host 'Open a new terminal, enter a project directory, and run: basekit' -ForegroundColor Green
+    Write-Host "BasedKit launcher installed at $(Join-Path $binDir 'basedkit.cmd')" -ForegroundColor Green
+    Write-Host 'Open a new terminal, enter a project directory, and run: basedkit' -ForegroundColor Green
 } finally {
     if ($tempDir -and (Test-Path $tempDir)) { Remove-Item -Recurse -Force -LiteralPath $tempDir }
 }

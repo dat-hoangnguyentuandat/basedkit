@@ -1,14 +1,14 @@
 #!/usr/bin/env python3
 """
-BaseKit Help Command - All-in-one guide with dynamic command discovery.
+BasedKit Help Command - All-in-one guide with dynamic command discovery.
 Scans .claude/commands/ directory to build catalog at runtime.
 
 Usage:
-    python bk-help.py                    # Overview with quick start
-    python bk-help.py fix                # Category guide with workflow
-    python bk-help.py plan:fast          # Command details
-    python bk-help.py debug login error  # Task recommendations
-    python bk-help.py auth               # Search (unknown word)
+    python basedkit-help.py                    # Overview with quick start
+    python basedkit-help.py fix                # Category guide with workflow
+    python basedkit-help.py plan:fast          # Command details
+    python basedkit-help.py debug login error  # Task recommendations
+    python basedkit-help.py auth               # Search (unknown word)
 """
 
 import sys
@@ -22,7 +22,7 @@ if sys.platform == 'win32':
 
 
 # Output type markers for LLM presentation guidance
-# Format: @BK_OUTPUT_TYPE:<type>
+# Format: @BASEDKIT_OUTPUT_TYPE:<type>
 # Types:
 #   - comprehensive-docs: Full documentation, show verbatim + add context
 #   - category-guide: Workflow guide, show full + explain workflow
@@ -40,7 +40,7 @@ OUTPUT_TYPES = {
 
 def emit_output_type(output_type: str) -> None:
     """Emit output type marker for LLM presentation guidance."""
-    print(f"@BK_OUTPUT_TYPE:{output_type}")
+    print(f"@BASEDKIT_OUTPUT_TYPE:{output_type}")
     print()
 
 
@@ -149,7 +149,7 @@ TASK_MAPPINGS = {
     "integrate": ["integrate", "payment", "api", "connect", "webhook", "third-party"],
     "skill": ["skill", "agent", "automate", "workflow"],
     "scout": ["find", "search", "locate", "explore", "scan", "where"],
-    "config": ["config", "configure", "settings", "bk.json", ".bk.json", "setup", "locale", "language", "paths"],
+    "config": ["config", "configure", "settings", "basedkit.json", ".basedkit.json", "setup", "locale", "language", "paths"],
     "coding-level": ["coding", "level", "eli5", "junior", "senior", "lead", "god", "beginner", "expert", "teach", "learn", "explain"],
     # New categories
     "worktree": ["worktree", "parallel", "isolate", "isolation", "concurrent", "multiple branches"],
@@ -284,13 +284,13 @@ CATEGORY_GUIDES = {
             ("Tech Lead", "`codingLevel: 4` (risk matrix, strategy)"),
             ("God Mode", "`codingLevel: 5` (code first, no fluff)"),
         ],
-        "tip": "Set in .bk.json. Guidelines auto-inject on session start",
+        "tip": "Set in .basedkit.json. Guidelines auto-inject on session start",
     },
     "config": {
-        "title": "BaseKit Configuration (.bk.json)",
+        "title": "BasedKit Configuration (.basedkit.json)",
         "workflow": [
-            ("Global", "Set user prefs in `~/.claude/.bk.json`"),
-            ("Local", "Override per-project in `./.claude/.bk.json`"),
+            ("Global", "Set user prefs in `~/.claude/.basedkit.json`"),
+            ("Local", "Override per-project in `./.claude/.basedkit.json`"),
             ("Resolution", "DEFAULT → global → local (deep merge)"),
         ],
         "tip": "Global config works in fresh dirs; local overrides for projects",
@@ -370,9 +370,9 @@ Docs: `.claude/hooks/notifications/docs/`""",
 
 
 def detect_prefix(commands_dir: Path) -> str:
-    """Detect if commands use /bk: prefix based on directory structure."""
-    bk_commands_dir = commands_dir / "bk"
-    return "bk:" if bk_commands_dir.exists() and bk_commands_dir.is_dir() else ""
+    """Detect if commands use /basedkit: prefix based on directory structure."""
+    basedkit_commands_dir = commands_dir / "basedkit"
+    return "basedkit:" if basedkit_commands_dir.exists() and basedkit_commands_dir.is_dir() else ""
 
 
 def parse_frontmatter(file_path: Path) -> dict:
@@ -512,9 +512,9 @@ def show_overview(data: dict, prefix: str) -> None:
     commands = data["commands"]
     categories = data["categories"]
     total = sum(len(cmds) for cmds in commands.values())
-    help_cmd = f"/{prefix}bk-help" if prefix else "/bk-help"
+    help_cmd = f"/{prefix}basedkit-help" if prefix else "/basedkit-help"
 
-    print("# BaseKit Commands")
+    print("# BasedKit Commands")
     print()
     print(f"{total} commands across {len(categories)} categories.")
     print()
@@ -616,13 +616,13 @@ def show_command(data: dict, command: str, prefix: str) -> None:
     commands = data["commands"]
 
     # Normalize search term
-    search = command.lower().replace("/bk:", "").replace("/", "").replace(":", "")
+    search = command.lower().replace("/basedkit:", "").replace("/", "").replace(":", "")
 
     found = None
     for cmds in commands.values():
         for cmd in cmds:
             # Normalize command name for comparison
-            name = cmd["name"].lower().replace("/bk:", "").replace("/", "").replace(":", "")
+            name = cmd["name"].lower().replace("/basedkit:", "").replace("/", "").replace(":", "")
             if name == search:
                 found = cmd
                 break
@@ -822,14 +822,14 @@ def recommend_task(data: dict, task: str, prefix: str) -> None:
 
 
 def show_config_guide() -> None:
-    """Display comprehensive .bk.json configuration guide."""
+    """Display comprehensive .basedkit.json configuration guide."""
     emit_output_type("comprehensive-docs")
 
-    print("# BaseKit Configuration (.bk.json)")
+    print("# BasedKit Configuration (.basedkit.json)")
     print()
     print("**Locations (cascading resolution):**")
-    print("- Global: `~/.claude/.bk.json` (user preferences)")
-    print("- Local: `./.claude/.bk.json` (project overrides)")
+    print("- Global: `~/.claude/.basedkit.json` (user preferences)")
+    print("- Local: `./.claude/.basedkit.json` (project overrides)")
     print()
     print("**Resolution Order:** `DEFAULT → global → local`")
     print("- Global config sets user defaults")
@@ -842,7 +842,7 @@ def show_config_guide() -> None:
     print()
     print("## Quick Start")
     print()
-    print("**Global config** (`~/.claude/.bk.json`) - your preferences:")
+    print("**Global config** (`~/.claude/.basedkit.json`) - your preferences:")
     print("```json")
     print('{')
     print('  "locale": {')
@@ -853,7 +853,7 @@ def show_config_guide() -> None:
     print('}')
     print("```")
     print()
-    print("**Local override** (`./.claude/.bk.json`) - project-specific:")
+    print("**Local override** (`./.claude/.basedkit.json`) - project-specific:")
     print("```json")
     print('{')
     print('  "plan": { "issuePrefix": "JIRA-" },')
@@ -983,14 +983,14 @@ def show_config_guide() -> None:
     print()
     print("**Global install user (fresh directories work):**")
     print("```bash")
-    print("# ~/.claude/.bk.json - applies everywhere")
+    print("# ~/.claude/.basedkit.json - applies everywhere")
     print("cd /tmp/new-project && claude  # Uses global config")
     print("```")
     print()
     print("**Project with local override:**")
     print("```bash")
     print("# Global: issuePrefix = \"GH-\"")
-    print("# Local (.claude/.bk.json): issuePrefix = \"JIRA-\"")
+    print("# Local (.claude/.basedkit.json): issuePrefix = \"JIRA-\"")
     print("# Result: issuePrefix = \"JIRA-\" (local wins)")
     print("```")
     print()
@@ -1031,7 +1031,7 @@ def show_coding_level_guide() -> None:
     print()
     print("## Configuration")
     print()
-    print("**Set in `.bk.json`:**")
+    print("**Set in `.basedkit.json`:**")
     print("```json")
     print('{')
     print('  "codingLevel": 0')
@@ -1039,14 +1039,14 @@ def show_coding_level_guide() -> None:
     print("```")
     print()
     print("**Location (cascading):**")
-    print("- Global: `~/.claude/.bk.json` - personal preference")
-    print("- Local: `./.claude/.bk.json` - project override")
+    print("- Global: `~/.claude/.basedkit.json` - personal preference")
+    print("- Local: `./.claude/.basedkit.json` - project override")
     print()
     print("---")
     print()
     print("## How It Works")
     print()
-    print("1. SessionStart hook reads `codingLevel` from `.bk.json`")
+    print("1. SessionStart hook reads `codingLevel` from `.basedkit.json`")
     print("2. If 0-5, injects guidelines from `.claude/output-styles/coding-level-*.md`")
     print("3. Commands like `/brainstorm` follow the injected guidelines")
     print()
@@ -1136,7 +1136,7 @@ def main():
     input_str = " ".join(args).strip()
 
     # Special case: config documentation (not a command category)
-    if input_str.lower() in ["config", "configuration", ".bk.json", "bk.json"]:
+    if input_str.lower() in ["config", "configuration", ".basedkit.json", "basedkit.json"]:
         show_config_guide()
         return
 

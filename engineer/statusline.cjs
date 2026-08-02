@@ -18,7 +18,7 @@ const path = require('path');
 const { green, yellow, red, cyan, magenta, dim, coloredBar, RESET, shouldUseColor } = require('./hooks/lib/colors.cjs');
 const { parseTranscript } = require('./hooks/lib/transcript-parser.cjs');
 const { countConfigs } = require('./hooks/lib/config-counter.cjs');
-const { loadConfig } = require('./hooks/lib/bk-config-utils.cjs');
+const { loadConfig } = require('./hooks/lib/basedkit-config-utils.cjs');
 
 // Buffer constant matching /context output (22.5% of 200k)
 const AUTOCOMPACT_BUFFER = 45000;
@@ -428,7 +428,7 @@ async function main() {
     try {
       const sessionId = data.session_id;
       if (sessionId) {
-        const sessionPath = path.join(os.tmpdir(), `bk-session-${sessionId}.json`);
+        const sessionPath = path.join(os.tmpdir(), `basedkit-session-${sessionId}.json`);
         if (fs.existsSync(sessionPath)) {
           const session = JSON.parse(fs.readFileSync(sessionPath, 'utf8'));
           const planPath = session.activePlan?.trim();
@@ -460,7 +460,7 @@ async function main() {
     const sessionId = data.session_id;
     if (sessionId && contextSize > 0) {
       try {
-        const contextDataPath = path.join(os.tmpdir(), `bk-context-${sessionId}.json`);
+        const contextDataPath = path.join(os.tmpdir(), `basedkit-context-${sessionId}.json`);
         fs.writeFileSync(contextDataPath, JSON.stringify({
           percent: contextPercent,
           tokens: totalTokens,
@@ -481,7 +481,7 @@ async function main() {
     // Read actual reset time and utilization from usage limits cache (written by usage-context-awareness hook)
     let usagePercent = null;
     try {
-      const usageCachePath = path.join(os.tmpdir(), 'bk-usage-limits-cache.json');
+      const usageCachePath = path.join(os.tmpdir(), 'basedkit-usage-limits-cache.json');
       if (fs.existsSync(usageCachePath)) {
         const cache = JSON.parse(fs.readFileSync(usageCachePath, 'utf8'));
 

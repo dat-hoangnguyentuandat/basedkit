@@ -1,7 +1,7 @@
 import { readFile, writeFile } from 'node:fs/promises';
 import path from 'node:path';
 
-const DEFAULT_REPOSITORY = 'dat-hoangnguyentuandat/basekit';
+const DEFAULT_REPOSITORY = 'dat-hoangnguyentuandat/basedkit';
 const DEFAULT_REF = 'main';
 const CACHE_TTL_MS = 15 * 60 * 1000;
 const REQUEST_TIMEOUT_MS = 3500;
@@ -26,7 +26,7 @@ export async function checkForUpdate({
   cacheTtlMs = CACHE_TTL_MS,
   timeoutMs = REQUEST_TIMEOUT_MS,
 } = {}) {
-  const releaseFile = path.join(sourceRoot, '.basekit-release.json');
+  const releaseFile = path.join(sourceRoot, '.basedkit-release.json');
   const release = await readJson(releaseFile, {
     repository: DEFAULT_REPOSITORY,
     ref: DEFAULT_REF,
@@ -50,7 +50,7 @@ export async function checkForUpdate({
         headers: {
           Accept: 'application/vnd.github+json',
           'X-GitHub-Api-Version': '2022-11-28',
-          'User-Agent': 'basekit-launcher',
+          'User-Agent': 'basedkit-launcher',
         },
         signal: controller.signal,
       },
@@ -93,8 +93,8 @@ export async function checkForUpdate({
 }
 
 export function updateSummary(state) {
-  if (state.status === 'available') return 'A new BaseKit update is available.';
-  if (state.status === 'current') return 'BaseKit is up to date.';
-  if (state.status === 'unknown') return 'Reinstall BaseKit once to enable update checks.';
+  if (state.status === 'available') return 'A new BasedKit update is available.';
+  if (state.status === 'current') return 'BasedKit is up to date.';
+  if (state.status === 'unknown') return 'Reinstall BasedKit once to enable update checks.';
   return `Update check unavailable: ${state.error}`;
 }

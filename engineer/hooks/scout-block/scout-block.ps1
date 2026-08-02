@@ -1,5 +1,5 @@
 # scout-block.ps1 - PowerShell implementation for blocking heavy directories
-# Reads patterns from .bkignore file (defaults: node_modules, __pycache__, .git, dist, build)
+# Reads patterns from .basedkitignore file (defaults: node_modules, __pycache__, .git, dist, build)
 #
 # Blocking Rules:
 # - File paths: Blocks any file_path/path/pattern containing blocked directories
@@ -33,19 +33,19 @@ if (-not $hookData.tool_input) {
 # Extract tool input
 $toolInput = $hookData.tool_input
 
-# Determine script directory and .claude folder for .bkignore lookup
+# Determine script directory and .claude folder for .basedkitignore lookup
 # Script is at .claude/hooks/scout-block/scout-block.ps1, so go 2 levels up to .claude/
 $scriptDir = Split-Path -Parent $MyInvocation.MyCommand.Path
 $hooksDir = Split-Path -Parent $scriptDir
 $claudeDir = Split-Path -Parent $hooksDir
-$bkignoreFile = Join-Path $claudeDir ".bkignore"
+$basedkitignoreFile = Join-Path $claudeDir ".basedkitignore"
 
 # Default blocked patterns
 $blockedPatterns = @('node_modules', '__pycache__', '\.git', 'dist', 'build')
 
-# Read patterns from .bkignore if it exists
-if (Test-Path $bkignoreFile) {
-    $patterns = Get-Content $bkignoreFile |
+# Read patterns from .basedkitignore if it exists
+if (Test-Path $basedkitignoreFile) {
+    $patterns = Get-Content $basedkitignoreFile |
         ForEach-Object { $_.Trim() } |
         Where-Object { $_ -and -not $_.StartsWith('#') }
     if ($patterns.Count -gt 0) {

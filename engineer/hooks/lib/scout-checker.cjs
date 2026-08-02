@@ -1,8 +1,8 @@
 const fs = require('fs');
 
-function parsePatterns(bkignorePath) {
+function parsePatterns(basedkitignorePath) {
   try {
-    return fs.readFileSync(bkignorePath, 'utf8')
+    return fs.readFileSync(basedkitignorePath, 'utf8')
       .split(/\r?\n/)
       .map(x => x.trim())
       .filter(x => x && !x.startsWith('#'));
@@ -63,7 +63,7 @@ function matchPattern(value, patterns) {
 }
 
 function checkScoutBlock({ toolName, toolInput, options = {} }) {
-  const patterns = parsePatterns(options.bkignorePath);
+  const patterns = parsePatterns(options.basedkitignorePath);
 
   if (toolName === 'Bash') {
     const cmd = toolInput.command || '';

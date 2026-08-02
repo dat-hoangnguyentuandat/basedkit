@@ -30,7 +30,7 @@
   },
   "assertions": [],
   "kits": {
-    "BaseKit Engineer": {
+    "BasedKit Engineer": {
       "installedSettings": {
         "hooks": [
           "node $HOME/.claude/hooks/session-init.cjs",

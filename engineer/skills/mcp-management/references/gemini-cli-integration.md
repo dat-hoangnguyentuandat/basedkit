@@ -2,7 +2,7 @@
 
 ## Model Configuration
 
-Read model from `.claude/.bk.json`: `gemini.model` (default: `gemini-3.0-flash`)
+Read model from `.claude/.basedkit.json`: `gemini.model` (default: `gemini-3.0-flash`)
 
 ## ⚠️ CRITICAL: Use Stdin Piping, NOT -p Flag
 

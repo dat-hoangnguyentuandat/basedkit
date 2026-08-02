@@ -1,19 +1,19 @@
-BaseKit Copyright and Third-Party Notices
+BasedKit Copyright and Third-Party Notices
 =========================================
 
-This distribution contains original BaseKit launcher and installation code,
+This distribution contains original BasedKit launcher and installation code,
 adapted toolkit material, and independently licensed third-party components.
 Copyright remains with the respective copyright holders. This notice does not
 replace, expand, or restrict the license terms shipped with each component.
 
-BaseKit
+BasedKit
 -------
 
-Copyright (c) 2026 BaseKit contributors.
+Copyright (c) 2026 BasedKit contributors.
 
-The BaseKit name, launcher, provider conversion layer, bootstrap scripts, and
+The BasedKit name, launcher, provider conversion layer, bootstrap scripts, and
 project merge implementation include modifications created for this
-distribution. BaseKit does not claim ownership of upstream or third-party
+distribution. BasedKit does not claim ownership of upstream or third-party
 materials identified below.
 
 ClaudeKit upstream attribution
@@ -35,7 +35,7 @@ The public ClaudeKit skills collection did not expose a repository-wide
 license file when this notice was prepared. Individual skill license files and
 frontmatter declarations remain controlling for the corresponding files.
 ClaudeKit and its associated names and marks belong to their respective
-owners. BaseKit is an independent adaptation and is not represented as an
+owners. BasedKit is an independent adaptation and is not represented as an
 official ClaudeKit release.
 
 Bundled skill notices
@@ -147,7 +147,7 @@ document skills for DOCX, PDF, PPTX, and XLSX with the following notice:
 
 Their license prohibits extraction, derivative works, and third-party
 distribution. Those four skill directories are intentionally excluded from
-the public BaseKit repository and from the installer. BaseKit does not grant
+the public BasedKit repository and from the installer. BasedKit does not grant
 any rights to those materials and does not remove separately authorized local
 copies already present on a user's machine.
 
@@ -155,7 +155,7 @@ General dependency notice
 -------------------------
 
 Some skill scripts install or invoke additional packages and command-line
-tools at runtime. Those dependencies are not relicensed by BaseKit. Their own
+tools at runtime. Those dependencies are not relicensed by BasedKit. Their own
 copyright notices and license terms apply when installed. Preserve all LICENSE,
 NOTICE, COPYING, and attribution files included in this repository and in any
 runtime dependencies.

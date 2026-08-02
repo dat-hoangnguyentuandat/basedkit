@@ -1,10 +1,10 @@
 ---
-description: BaseKit usage guide - just type naturally
+description: BasedKit usage guide - just type naturally
 argument-hint: [category|command|task description]
 ---
 
 Think harder.
-All-in-one BaseKit guide. Run the script and present output based on type markers.
+All-in-one BasedKit guide. Run the script and present output based on type markers.
 
 ## Intent Validation
 
@@ -33,16 +33,16 @@ The Python script only understands English keywords. If `$ARGUMENTS` is in anoth
 ## Execution
 
 ```bash
-python .claude/scripts/bk-help.py "$ARGUMENTS"
+python .claude/scripts/basedkit-help.py "$ARGUMENTS"
 ```
 
 ## Output Type Detection
 
-The script outputs a type marker on the first line: `@BK_OUTPUT_TYPE:<type>`
+The script outputs a type marker on the first line: `@BASEDKIT_OUTPUT_TYPE:<type>`
 
 **Read this marker and adjust your presentation accordingly:**
 
-### `@BK_OUTPUT_TYPE:comprehensive-docs`
+### `@BASEDKIT_OUTPUT_TYPE:comprehensive-docs`
 
 Full documentation (config, schema, setup guides).
 
@@ -59,8 +59,8 @@ Full documentation (config, schema, setup guides).
 ## Additional Tips
 
 **When to use global vs local config:**
-- Use global (~/.claude/.bk.json) for personal preferences like language, issue prefix style
-- Use local (./.claude/.bk.json) for project-specific paths, naming conventions
+- Use global (~/.claude/.basedkit.json) for personal preferences like language, issue prefix style
+- Use local (./.claude/.basedkit.json) for project-specific paths, naming conventions
 
 **Common setup for teams:**
 Each team member sets their locale globally, but projects share local config via git.
@@ -68,7 +68,7 @@ Each team member sets their locale globally, but projects share local config via
 Need help setting up a specific configuration?
 ```
 
-### `@BK_OUTPUT_TYPE:category-guide`
+### `@BASEDKIT_OUTPUT_TYPE:category-guide`
 
 Workflow guides for command categories (fix, plan, cook, etc.).
 
@@ -80,7 +80,7 @@ Workflow guides for command categories (fix, plan, cook, etc.).
    - Transition tips between commands
 3. Offer to help with a specific task
 
-### `@BK_OUTPUT_TYPE:command-details`
+### `@BASEDKIT_OUTPUT_TYPE:command-details`
 
 Single command documentation.
 
@@ -92,7 +92,7 @@ Single command documentation.
    - Common flags or variations
 3. Offer to run the command for them
 
-### `@BK_OUTPUT_TYPE:search-results`
+### `@BASEDKIT_OUTPUT_TYPE:search-results`
 
 Search matches for a keyword.
 
@@ -104,7 +104,7 @@ Search matches for a keyword.
    - Offer to explain any specific command
 3. Ask what they're trying to accomplish
 
-### `@BK_OUTPUT_TYPE:task-recommendations`
+### `@BASEDKIT_OUTPUT_TYPE:task-recommendations`
 
 Task-based command suggestions.
 
