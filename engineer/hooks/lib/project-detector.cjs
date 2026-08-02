@@ -1,0 +1,15 @@
+const fs=require('fs');
+const path=require('path');
+const cp=require('child_process');
+function execSafe(cmd,cwd=process.cwd()){try{return cp.execSync(cmd,{cwd,encoding:'utf8',stdio:['ignore','pipe','ignore'],timeout:5000,windowsHide:true}).trim()}catch{return ''}}
+function detectProjectType(value='auto',cwd=process.cwd()){if(value&&value!=='auto')return value; if(fs.existsSync(path.join(cwd,'package.json')))return 'node'; if(fs.existsSync(path.join(cwd,'pyproject.toml'))||fs.existsSync(path.join(cwd,'requirements.txt')))return 'python'; if(fs.existsSync(path.join(cwd,'.csproj')))return 'dotnet'; return 'generic'}
+function detectPackageManager(value='auto',cwd=process.cwd()){if(value&&value!=='auto')return value; if(fs.existsSync(path.join(cwd,'pnpm-lock.yaml')))return 'pnpm'; if(fs.existsSync(path.join(cwd,'yarn.lock')))return 'yarn'; if(fs.existsSync(path.join(cwd,'package-lock.json')))return 'npm'; if(fs.existsSync(path.join(cwd,'bun.lockb'))||fs.existsSync(path.join(cwd,'bun.lock')))return 'bun'; return ''}
+function detectFramework(value='auto',cwd=process.cwd()){if(value&&value!=='auto')return value; const pkg=path.join(cwd,'package.json'); try{if(fs.existsSync(pkg)){const p=JSON.parse(fs.readFileSync(pkg,'utf8'));const deps={...p.dependencies,...p.devDependencies}; if(deps.next)return 'nextjs'; if(deps.react)return 'react'; if(deps.vue)return 'vue'; if(deps.svelte)return 'svelte'; if(deps.express)return 'express';}}catch{} return ''}
+function getPythonVersion(){return execSafe('python --version')||execSafe('py -V')}
+function getGitRemoteUrl(cwd=process.cwd()){return execSafe('git remote get-url origin',cwd)}
+function getGitBranch(cwd=process.cwd()){return execSafe('git branch --show-current',cwd)||execSafe('git rev-parse --abbrev-ref HEAD',cwd)}
+function getGitRoot(cwd=process.cwd()){return execSafe('git rev-parse --show-toplevel',cwd)}
+function getCodingLevelStyleName(config={}){return config.codingLevel?.style||config.style||'balanced'}
+function getCodingLevelGuidelines(style='balanced'){const map={minimal:['Prefer small changes','Avoid overengineering'],balanced:['Keep changes focused','Verify before claiming done'],strict:['Prefer deterministic checks','Document assumptions and risks']}; return map[style]||map.balanced}
+function buildContextOutput({detections={},resolved={},reportsPath='',staticEnv={},config={}}={}){const lines=[]; lines.push('## ClaudeKit Session'); if(detections.type)lines.push(`- Project: ${detections.type}`); if(detections.framework)lines.push(`- Framework: ${detections.framework}`); if(detections.pm)lines.push(`- Package manager: ${detections.pm}`); if(resolved.path)lines.push(`- Plan: ${resolved.path}`); if(reportsPath)lines.push(`- Reports: ${reportsPath}`); if(staticEnv.gitBranch)lines.push(`- Branch: ${staticEnv.gitBranch}`); const style=getCodingLevelStyleName(config); lines.push(`- Style: ${style}`); return lines.join('\n')}
+module.exports={detectProjectType,detectPackageManager,detectFramework,getPythonVersion,getGitRemoteUrl,getGitBranch,getGitRoot,getCodingLevelStyleName,getCodingLevelGuidelines,buildContextOutput,execSafe};

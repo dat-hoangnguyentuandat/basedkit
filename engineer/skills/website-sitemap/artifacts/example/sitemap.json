@@ -1,0 +1,59 @@
+{
+  "startUrl": "https://example.com/",
+  "origin": "https://example.com",
+  "generatedAt": "2026-05-21T14:36:34.722Z",
+  "pages": [
+    {
+      "url": "https://example.com/",
+      "status": 200,
+      "title": "Example Domain",
+      "metaDescription": "",
+      "canonical": "https://example.com/",
+      "lang": "en",
+      "h1": [
+        "Example Domain"
+      ],
+      "section": "/",
+      "internalLinks": [],
+      "externalLinks": [
+        "https://iana.org/domains/example"
+      ],
+      "linkDetails": [
+        {
+          "url": "https://iana.org/domains/example",
+          "text": "Learn more"
+        }
+      ],
+      "forms": [],
+      "assets": {
+        "images": [],
+        "scripts": [],
+        "stylesheets": [],
+        "iframes": []
+      },
+      "assetCounts": {
+        "images": 0,
+        "scripts": 0,
+        "stylesheets": 0,
+        "iframes": 0
+      }
+    }
+  ],
+  "skipped": [],
+  "warnings": [],
+  "sections": {
+    "/": 1
+  },
+  "duplicates": {
+    "titles": {
+      "Example Domain": [
+        "https://example.com/"
+      ]
+    },
+    "canonicals": {
+      "https://example.com/": [
+        "https://example.com/"
+      ]
+    }
+  }
+}

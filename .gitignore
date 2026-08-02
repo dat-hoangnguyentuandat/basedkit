@@ -1,0 +1,22 @@
+# BaseKit local state
+install-info.json
+projects.json
+locks/
+
+# Generated installation metadata and user overrides
+engineer/metadata.json
+engineer/.claude/metadata.json
+engineer/settings.local.json
+engineer/settings.local.json.bak_*
+
+# Anthropic-distributed skills whose licenses prohibit redistribution
+engineer/skills/document-skills/docx/
+engineer/skills/document-skills/pdf/
+engineer/skills/document-skills/pptx/
+engineer/skills/document-skills/xlsx/
+
+# Local test artifacts
+.tmp/
+*.log
+**/.coverage
+**/coverage-*.json
