@@ -23,7 +23,8 @@ The interactive launcher detects the current project and lets you choose:
 1. Claude Code
 2. Codex
 3. Both
-4. Exit
+4. Check for Updates, or Update BaseKit when a newer revision is available
+5. Exit
 
 Use the arrow keys and Enter, or press a number to select an option.
 
@@ -46,6 +47,8 @@ scripts and automation:
 basekit claude
 basekit codex
 basekit both
+basekit update
+basekit update --check
 basekit codex --target /path/to/project
 basekit --help
 basekit --version
@@ -91,10 +94,25 @@ Codex receives:
 
 ## Updating BaseKit
 
-Re-run the one-time bootstrap command to refresh the installed launcher and its
-bundled kit. Then run `basekit` inside each project that should receive the
-updated files. Project customizations continue to follow the conflict rules
-above.
+Each bootstrap records the exact installed Git commit. When the interactive
+launcher starts, it compares that revision with the latest commit on GitHub and
+shows an update warning when they differ. Update checks are cached for 15
+minutes and time out quickly, so an offline or rate-limited GitHub request does
+not block project installation.
+
+Select the update item in the menu or run:
+
+```sh
+basekit update --check
+basekit update
+```
+
+The first command only reports status. The second runs the platform bootstrap
+and installs the latest launcher and bundled kit. Then run `basekit` inside each
+project that should receive the updated files. Project customizations continue
+to follow the conflict rules above.
+
+Re-running the original bootstrap command remains a supported recovery path.
 
 The previous launcher payload is retained as `app.previous` under the BaseKit
 user installation directory during an update.
