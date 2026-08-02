@@ -44,7 +44,8 @@ test('detects an available update and reuses the cached result', async () => {
   assert.equal(second.status, 'available');
   assert.equal(second.cached, true);
   assert.equal(requests, 1);
-  assert.match(updateSummary(first), /Update available/);
+  assert.equal(updateSummary(first), 'A new BaseKit update is available.');
+  assert.doesNotMatch(updateSummary(first), /a{40}|b{40}|aaaaaaa|bbbbbbb/);
 });
 
 test('reports a current installation', async () => {
@@ -55,7 +56,8 @@ test('reports a current installation', async () => {
     force: true,
   });
   assert.equal(state.status, 'current');
-  assert.match(updateSummary(state), /is current/);
+  assert.equal(updateSummary(state), 'BaseKit is up to date.');
+  assert.doesNotMatch(updateSummary(state), /a{40}|aaaaaaa/);
 });
 
 test('does not block the launcher when GitHub is unavailable', async () => {

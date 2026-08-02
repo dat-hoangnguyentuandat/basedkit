@@ -93,10 +93,8 @@ export async function checkForUpdate({
 }
 
 export function updateSummary(state) {
-  const installed = state.installedCommit?.slice(0, 7) || 'unknown';
-  const latest = state.latestCommit?.slice(0, 7) || 'unknown';
-  if (state.status === 'available') return `Update available: ${installed} -> ${latest}`;
-  if (state.status === 'current') return `BaseKit is current (${latest})`;
-  if (state.status === 'unknown') return `Latest is ${latest}; reinstall once to record the installed revision`;
+  if (state.status === 'available') return 'A new BaseKit update is available.';
+  if (state.status === 'current') return 'BaseKit is up to date.';
+  if (state.status === 'unknown') return 'Reinstall BaseKit once to enable update checks.';
   return `Update check unavailable: ${state.error}`;
 }

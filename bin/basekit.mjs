@@ -215,9 +215,7 @@ async function updatePage(initialState) {
     const actions = state.status === 'available' ? ['Update Now', 'Check Again', 'Back'] : ['Check Again', 'Back'];
     const selected = await selectMenu((index) => {
       title('BaseKit update');
-      console.log(`  Installed commit: ${state.installedCommit?.slice(0, 7) || 'unknown'}`);
-      console.log(`  Latest commit:    ${state.latestCommit?.slice(0, 7) || 'unknown'}`);
-      console.log(`  Status:           ${updateSummary(state)}\n`);
+      console.log(`  Status: ${updateSummary(state)}\n`);
       actions.forEach((label, itemIndex) => menuLine(`${itemIndex + 1}. ${label}`, index === itemIndex));
       if (message) console.log(`\n  ${message}`);
       console.log('\n  Enter to select - Esc to return to launcher');
