@@ -66,11 +66,7 @@ selected and additional bundles can be toggled with Space or Enter:
 
 - **Base**: Core agents, commands, hooks, workflows, and general engineering
   skills. Base excludes every skill owned by an optional bundle.
-- **UI/UX**: Advanced interface design direction and implementation taste.
-  Currently provides `hallmark`.
-- **CMS**: CMS plugins, themes, widgets, sitemaps, and production SEO. Currently
-  provides `io-sitemap`, `plugin-cms`, `seo`, `theme-cms`, `website-sitemap`, and
-  `widget-cms`.
+...
 
 Running Base again after previously selecting an optional bundle removes that
 bundle's unmodified managed files. Customized files are preserved.

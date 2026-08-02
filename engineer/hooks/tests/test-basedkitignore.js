@@ -13,6 +13,13 @@ const scriptPath = path.join(__dirname, '..', 'scout-block', 'scout-block.sh');
 const basedkitignorePath = path.join(__dirname, '..', '..', '.basedkitignore');
 const basedkitignoreBackupPath = basedkitignorePath + '.backup';
 
+function bashPath(filePath) {
+  if (process.platform !== 'win32') return filePath;
+  return filePath
+    .replace(/^([A-Za-z]):[\\/]/, (_, drive) => `/mnt/${drive.toLowerCase()}/`)
+    .replaceAll('\\', '/');
+}
+
 // Backup original .basedkitignore if exists
 let originalBasedkitignore = null;
 if (fs.existsSync(basedkitignorePath)) {
@@ -23,7 +30,7 @@ if (fs.existsSync(basedkitignorePath)) {
 function runTest(name, input, expected) {
   try {
     const inputJson = JSON.stringify(input);
-    execSync(`bash "${scriptPath}"`, {
+    execSync(`bash "${bashPath(scriptPath)}"`, {
       input: inputJson,
       encoding: 'utf-8',
       stdio: ['pipe', 'pipe', 'pipe']
