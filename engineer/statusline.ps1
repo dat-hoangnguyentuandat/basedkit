@@ -12,8 +12,8 @@
 [Console]::OutputEncoding = [System.Text.Encoding]::UTF8
 $OutputEncoding = [System.Text.Encoding]::UTF8
 
-# Calibration file path (now in ck/ namespace - fixes #178)
-$CalibrationPath = Join-Path (Join-Path $env:TEMP "ck") "calibration.json"
+# Calibration file path (now in bk/ namespace - fixes #178)
+$CalibrationPath = Join-Path (Join-Path $env:TEMP "bk") "calibration.json"
 
 # Time conversion functions
 function ConvertTo-Epoch {

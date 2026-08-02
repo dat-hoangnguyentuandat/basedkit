@@ -1,8 +1,8 @@
 #!/usr/bin/env node
 
 /**
- * Test script for .ckignore functionality
- * Tests that scout-block.sh respects .ckignore patterns
+ * Test script for .bkignore functionality
+ * Tests that scout-block.sh respects .bkignore patterns
  */
 
 const { execSync } = require('child_process');
@@ -10,14 +10,14 @@ const fs = require('fs');
 const path = require('path');
 
 const scriptPath = path.join(__dirname, '..', 'scout-block', 'scout-block.sh');
-const ckignorePath = path.join(__dirname, '..', '..', '.ckignore');
-const ckignoreBackupPath = ckignorePath + '.backup';
+const bkignorePath = path.join(__dirname, '..', '..', '.bkignore');
+const bkignoreBackupPath = bkignorePath + '.backup';
 
-// Backup original .ckignore if exists
+// Backup original .bkignore if exists
 let originalCkignore = null;
-if (fs.existsSync(ckignorePath)) {
-  originalCkignore = fs.readFileSync(ckignorePath, 'utf-8');
-  fs.copyFileSync(ckignorePath, ckignoreBackupPath);
+if (fs.existsSync(bkignorePath)) {
+  originalCkignore = fs.readFileSync(bkignorePath, 'utf-8');
+  fs.copyFileSync(bkignorePath, bkignoreBackupPath);
 }
 
 function runTest(name, input, expected) {
@@ -39,25 +39,25 @@ function runTest(name, input, expected) {
 }
 
 function writeCkignore(patterns) {
-  fs.writeFileSync(ckignorePath, patterns.join('\n') + '\n');
+  fs.writeFileSync(bkignorePath, patterns.join('\n') + '\n');
 }
 
 function restoreCkignore() {
   if (originalCkignore !== null) {
-    fs.writeFileSync(ckignorePath, originalCkignore);
-    if (fs.existsSync(ckignoreBackupPath)) {
-      fs.unlinkSync(ckignoreBackupPath);
+    fs.writeFileSync(bkignorePath, originalCkignore);
+    if (fs.existsSync(bkignoreBackupPath)) {
+      fs.unlinkSync(bkignoreBackupPath);
     }
   }
 }
 
-console.log('Testing .ckignore functionality...\n');
+console.log('Testing .bkignore functionality...\n');
 
 let passed = 0;
 let failed = 0;
 
-// Test 1: Default patterns work (with existing .ckignore)
-console.log('--- Test 1: Default patterns from .ckignore ---');
+// Test 1: Default patterns work (with existing .bkignore)
+console.log('--- Test 1: Default patterns from .bkignore ---');
 let result = runTest(
   'node_modules blocked (default)',
   { tool_name: 'Read', tool_input: { file_path: 'node_modules/pkg.json' } },
@@ -72,7 +72,7 @@ if (result.success) {
 }
 
 // Test 2: Custom pattern - only block 'vendor' directory
-console.log('\n--- Test 2: Custom .ckignore with only "vendor" ---');
+console.log('\n--- Test 2: Custom .bkignore with only "vendor" ---');
 writeCkignore(['# Custom ignore', 'vendor']);
 
 result = runTest(
@@ -89,7 +89,7 @@ if (result.success) {
 }
 
 result = runTest(
-  'node_modules ALLOWED when not in .ckignore',
+  'node_modules ALLOWED when not in .bkignore',
   { tool_name: 'Read', tool_input: { file_path: 'node_modules/pkg.json' } },
   'ALLOWED'
 );
@@ -187,7 +187,7 @@ if (result.success) {
   failed++;
 }
 
-// Restore original .ckignore
+// Restore original .bkignore
 restoreCkignore();
 
 console.log(`\nResults: ${passed} passed, ${failed} failed`);

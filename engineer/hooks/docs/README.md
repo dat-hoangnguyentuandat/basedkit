@@ -146,7 +146,7 @@ notifications/
 
 Cross-platform hook blocking heavy directories to improve Claude performance.
 
-**Blocked Patterns** (configured in `.claude/.ckignore`):
+**Blocked Patterns** (configured in `.claude/.bkignore`):
 - `node_modules`, `__pycache__`, `.git`, `dist`, `build`
 
 **Testing:**
@@ -164,11 +164,11 @@ echo '{"tool_input":{"command":"ls node_modules"}}' | node .claude/hooks/scout-b
 
 **No notifications received:**
 - Verify env vars are set: `echo $TELEGRAM_BOT_TOKEN`
-- Check throttle state: `cat /tmp/ck-noti-throttle.json`
+- Check throttle state: `cat /tmp/bk-noti-throttle.json`
 - Test manually with echo pipe above
 
 **Provider throttled:**
-- Wait 5 minutes or delete `/tmp/ck-noti-throttle.json`
+- Wait 5 minutes or delete `/tmp/bk-noti-throttle.json`
 
 **Hooks not triggering:**
 - Verify hooks are added to `.claude/settings.json`

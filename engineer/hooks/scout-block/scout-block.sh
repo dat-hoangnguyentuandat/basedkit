@@ -1,6 +1,6 @@
 #!/bin/bash
 # scout-block.sh - Bash implementation for blocking heavy directories
-# Reads patterns from .ckignore file (defaults: node_modules, __pycache__, .git, dist, build)
+# Reads patterns from .bkignore file (defaults: node_modules, __pycache__, .git, dist, build)
 #
 # Blocking Rules:
 # - File paths: Blocks any file_path/path/pattern containing blocked directories
@@ -17,15 +17,15 @@ if [ -z "$INPUT" ]; then
   exit 2
 fi
 
-# Determine script directory for .ckignore lookup
+# Determine script directory for .bkignore lookup
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-# Look for .ckignore in .claude/ folder (2 levels up from .claude/hooks/scout-block/)
+# Look for .bkignore in .claude/ folder (2 levels up from .claude/hooks/scout-block/)
 CLAUDE_DIR="$(cd "$SCRIPT_DIR/../.." && pwd)"
-CKIGNORE_FILE="$CLAUDE_DIR/.ckignore"
+BKIGNORE_FILE="$CLAUDE_DIR/.bkignore"
 
 # Parse JSON and extract all relevant parameters using Node.js
 # Output format: "ALLOWED" or "BLOCKED:pattern1,pattern2,..."
-CHECK_RESULT=$(echo "$INPUT" | CKIGNORE_FILE="$CKIGNORE_FILE" node -e "
+CHECK_RESULT=$(echo "$INPUT" | BKIGNORE_FILE="$BKIGNORE_FILE" node -e "
 const fs = require('fs');
 const path = require('path');
 
@@ -42,12 +42,12 @@ try {
 
   const toolInput = data.tool_input;
 
-  // Read patterns from .ckignore file
-  const ckignorePath = process.env.CKIGNORE_FILE;
+  // Read patterns from .bkignore file
+  const bkignorePath = process.env.BKIGNORE_FILE;
   let blockedPatterns = ['node_modules', '__pycache__', '.git', 'dist', 'build']; // defaults
 
-  if (ckignorePath && fs.existsSync(ckignorePath)) {
-    const content = fs.readFileSync(ckignorePath, 'utf-8');
+  if (bkignorePath && fs.existsSync(bkignorePath)) {
+    const content = fs.readFileSync(bkignorePath, 'utf-8');
     const patterns = content
       .split('\n')
       .map(line => line.trim())

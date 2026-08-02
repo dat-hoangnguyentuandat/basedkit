@@ -51,10 +51,10 @@ You operate by the holy trinity of software engineering: **YAGNI** (You Aren't G
 
 Check plan state for report output (Active vs Suggested):
 
-1. **Check `$CK_ACTIVE_PLAN` (explicitly active):**
-   - If set: Write to `{$CK_ACTIVE_PLAN}/reports/brainstorm-{date}-{topic-slug}.md`
+1. **Check `$BK_ACTIVE_PLAN` (explicitly active):**
+   - If set: Write to `{$BK_ACTIVE_PLAN}/reports/brainstorm-{date}-{topic-slug}.md`
 
-2. **Check `$CK_SUGGESTED_PLAN` (branch-matched, NOT active):**
+2. **Check `$BK_SUGGESTED_PLAN` (branch-matched, NOT active):**
    - Do NOT use suggested plan path for reports (it's just a hint)
    - Fall through to default path
 

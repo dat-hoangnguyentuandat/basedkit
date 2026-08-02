@@ -27,7 +27,7 @@ Create a complete installable theme for `C:\xampp\htdocs\cms`. Treat `themes\def
 5. Verify every `style_key` and every route before activation. Seed realistic industry data and valid menu URLs.
 6. Activate the theme, publish assets, clear view/cache state, and reseed blocks only when testing changed defaults.
 7. Run smoke tests, pagination tests, responsive screenshots, legacy-content audit, and package audit.
-8. Run the SEO skill at `C:\Users\TDat\.claudekit\engineer\skills\seo\SKILL.md` against the public URL. Fix Critical/High findings before completion.
+8. Run the SEO skill at `C:\Users\TDat\.basekit\engineer\skills\seo\SKILL.md` against the public URL. Fix Critical/High findings before completion.
 9. Package with `php artisan theme:package {slug}` and inspect the ZIP contents.
 
 ## Non-Negotiable Contracts

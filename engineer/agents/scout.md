@@ -103,7 +103,7 @@ Check "Plan Context" section above for `Reports Path`. Use that path, or `plans/
 ### File Naming
 `scout-{date}-{topic-slug}.md`
 
-**Note:** `{date}` format injected by session hooks (`$CK_PLAN_DATE_FORMAT`).
+**Note:** `{date}` format injected by session hooks (`$BK_PLAN_DATE_FORMAT`).
 
 ### Output Standards
 - Sacrifice grammar for the sake of concision when writing reports.

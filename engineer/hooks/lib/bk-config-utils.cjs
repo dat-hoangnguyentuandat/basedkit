@@ -1,5 +1,5 @@
 /**
- * Shared utilities for ClaudeKit hooks
+ * Shared utilities for BaseKit hooks
  *
  * Contains config loading, path sanitization, and common constants
  * used by session-init.cjs and dev-rules-reminder.cjs
@@ -9,8 +9,8 @@ const fs = require('fs');
 const path = require('path');
 const os = require('os');
 
-const LOCAL_CONFIG_PATH = '.claude/.ck.json';
-const GLOBAL_CONFIG_PATH = path.join(os.homedir(), '.claude', '.ck.json');
+const LOCAL_CONFIG_PATH = '.claude/.bk.json';
+const GLOBAL_CONFIG_PATH = path.join(os.homedir(), '.claude', '.bk.json');
 
 // Legacy export for backward compatibility
 const CONFIG_PATH = LOCAL_CONFIG_PATH;
@@ -124,7 +124,7 @@ function loadConfigFromPath(configPath) {
  * @returns {string} Path to session temp file
  */
 function getSessionTempPath(sessionId) {
-  return path.join(os.tmpdir(), `ck-session-${sessionId}.json`);
+  return path.join(os.tmpdir(), `bk-session-${sessionId}.json`);
 }
 
 /**
@@ -286,7 +286,7 @@ function execSafe(cmd, options = {}) {
  * - 'mostRecent': REMOVED - was causing stale plan pollution
  *
  * @param {string} sessionId - Session identifier (optional)
- * @param {Object} config - ClaudeKit config
+ * @param {Object} config - BaseKit config
  * @returns {{ path: string|null, resolvedBy: 'session'|'branch'|null }} Resolution result with tracking
  */
 function resolvePlanPath(sessionId, config) {
@@ -453,8 +453,8 @@ function sanitizeConfig(config, projectRoot) {
  *
  * Resolution order (each layer overrides the previous):
  *   1. DEFAULT_CONFIG (hardcoded defaults)
- *   2. Global config (~/.claude/.ck.json) - user preferences
- *   3. Local config (./.claude/.ck.json) - project-specific overrides
+ *   2. Global config (~/.claude/.bk.json) - user preferences
+ *   3. Local config (./.claude/.bk.json) - project-specific overrides
  *
  * @param {Object} options - Options for config loading
  * @param {boolean} options.includeProject - Include project section (default: true)
@@ -725,8 +725,8 @@ function resolveNamingPattern(planConfig, gitBranch) {
   const validation = validateNamingPattern(pattern);
   if (!validation.valid) {
     // Log warning but return pattern anyway (fail-safe)
-    if (process.env.CK_DEBUG) {
-      console.error(`[ck-config] Warning: ${validation.error}`);
+    if (process.env.BK_DEBUG) {
+      console.error(`[bk-config] Warning: ${validation.error}`);
     }
   }
 

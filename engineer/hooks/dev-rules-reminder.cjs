@@ -18,7 +18,7 @@ const {
   buildReminderContext,
   wasRecentlyInjected
 } = require('./lib/context-builder.cjs');
-const { isHookEnabled } = require('./lib/ck-config-utils.cjs');
+const { isHookEnabled } = require('./lib/bk-config-utils.cjs');
 
 // Early exit if hook disabled in config
 if (!isHookEnabled('dev-rules-reminder')) {
@@ -38,7 +38,7 @@ async function main() {
     if (wasRecentlyInjected(payload.transcript_path)) process.exit(0);
 
     // Get session ID from hook input or env var
-    const sessionId = payload.session_id || process.env.CK_SESSION_ID || null;
+    const sessionId = payload.session_id || process.env.BK_SESSION_ID || null;
 
     // Issue #327: Use CWD as base for subdirectory workflow support
     // The baseDir is passed to buildReminderContext for absolute path resolution

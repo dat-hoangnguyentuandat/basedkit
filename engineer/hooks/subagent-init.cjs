@@ -22,7 +22,7 @@ const {
   normalizePath,
   extractTaskListId,
   isHookEnabled
-} = require('./lib/ck-config-utils.cjs');
+} = require('./lib/bk-config-utils.cjs');
 
 // Early exit if hook disabled in config
 if (!isHookEnabled('subagent-init')) {
@@ -79,14 +79,14 @@ async function main() {
     const baseDir = effectiveCwd;
 
     // Debug logging for path resolution troubleshooting
-    if (process.env.CK_DEBUG) {
+    if (process.env.BK_DEBUG) {
       console.error(`[subagent-init] effectiveCwd=${effectiveCwd}, gitRoot=${gitRoot}, baseDir=${baseDir}`);
     }
     const namePattern = resolveNamingPattern(config.plan, gitBranch);
 
     // Resolve plan and reports path - use absolute paths based on CWD (Issue #327)
     // Use session_id from payload to resolve active plan context (Issue #321)
-    const sessionId = payload.session_id || process.env.CK_SESSION_ID || null;
+    const sessionId = payload.session_id || process.env.BK_SESSION_ID || null;
     const resolved = resolvePlanPath(sessionId, config);
     const reportsPath = getReportsPath(resolved.path, resolved.resolvedBy, config.plan, config.paths, baseDir);
     const activePlan = resolved.resolvedBy === 'session' ? resolved.path : '';

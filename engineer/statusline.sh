@@ -10,8 +10,8 @@
 
 input=$(cat)
 
-# Calibration file path (now in /tmp/ck/ namespace - fixes #178)
-CALIBRATION_PATH="${TMPDIR:-/tmp}/ck/calibration.json"
+# Calibration file path (now in /tmp/bk/ namespace - fixes #178)
+CALIBRATION_PATH="${TMPDIR:-/tmp}/bk/calibration.json"
 
 # ---- time helpers ----
 to_epoch() {
