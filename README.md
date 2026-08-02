@@ -69,7 +69,8 @@ selected and additional bundles can be toggled with Space or Enter:
 - **UI/UX**: Advanced interface design direction and implementation taste.
   Currently provides `hallmark`.
 - **CMS**: CMS plugins, themes, widgets, sitemaps, and production SEO. Currently
-  provides `plugin-cms`, `seo`, `theme-cms`, `website-sitemap`, and `widget-cms`.
+  provides `io-sitemap`, `plugin-cms`, `seo`, `theme-cms`, `website-sitemap`, and
+  `widget-cms`.
 
 Running Base again after previously selecting an optional bundle removes that
 bundle's unmodified managed files. Customized files are preserved.

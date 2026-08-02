@@ -51,6 +51,7 @@ test('installs Claude and Codex into an existing project without deleting user f
   assert.ok((await readdir(path.join(target, '.agents', 'skills'))).includes('bk-plan'));
   assert.ok((await readdir(path.join(target, '.agents', 'skills', 'claude-code'))).includes('SKILL.md'));
   assert.equal(existsSync(path.join(target, '.agents', 'skills', 'hallmark')), false);
+  assert.equal(existsSync(path.join(target, '.agents', 'skills', 'io-sitemap')), false);
   assert.equal(existsSync(path.join(target, '.agents', 'skills', 'seo')), false);
 });
 
@@ -58,6 +59,7 @@ test('installs selected bundles and removes deselected unmodified bundle files',
   const target = mkdtempSync(path.join(os.tmpdir(), 'basekit-bundles-'));
   const cms = runInstaller(target, 'codex', 'base,cms');
   assert.deepEqual(cms.bundles, ['base', 'cms']);
+  assert.equal(existsSync(path.join(target, '.agents', 'skills', 'io-sitemap', 'SKILL.md')), true);
   assert.equal(existsSync(path.join(target, '.agents', 'skills', 'seo', 'SKILL.md')), true);
   assert.equal(existsSync(path.join(target, '.agents', 'skills', 'hallmark', 'SKILL.md')), false);
   assert.match(
@@ -66,6 +68,7 @@ test('installs selected bundles and removes deselected unmodified bundle files',
   );
 
   const ui = runInstaller(target, 'codex', 'base,ui-ux');
+  assert.equal(existsSync(path.join(target, '.agents', 'skills', 'io-sitemap')), false);
   assert.equal(existsSync(path.join(target, '.agents', 'skills', 'seo')), false);
   assert.equal(existsSync(path.join(target, '.agents', 'skills', 'hallmark', 'SKILL.md')), true);
   assert.ok(ui.result.codex.removed > 0);
