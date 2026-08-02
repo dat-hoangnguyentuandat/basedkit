@@ -1,85 +1,126 @@
 # BaseKit
 
-BaseKit la bo engineer kit dung chung cho Claude Code va Codex. Prefix lenh la
-`bk`, cau hinh BaseKit nam trong `.bk.json` va danh sach thu muc bo qua nam
-trong `.bkignore`.
+BaseKit installs a shared engineering toolkit for Claude Code, Codex, or both.
+It provides agents, reusable skills, commands, workflows, hooks, project rules,
+and supporting scripts while preserving existing project customizations.
 
-## Cai dat
+## Quick Start
 
-Mo terminal tai thu muc goc cua du an can cai, sau do chay:
+Install the launcher once:
 
 ```sh
 curl -fsSL https://raw.githubusercontent.com/dat-hoangnguyentuandat/basekit/main/install.sh | sh
 ```
 
-Installer se hoi mot trong ba lua chon:
+Open a new terminal, enter any project, and run:
+
+```sh
+basekit
+```
+
+The interactive launcher detects the current project and lets you choose:
 
 1. Claude Code
 2. Codex
-3. Ca hai
+3. Both
+4. Exit
 
-Khong can tao `.claude` hay `.codex` truoc. Installer tu kiem tra va tao thu
-muc con thieu; neu thu muc da ton tai, BaseKit duoc merge vao noi dung hien co.
+Use the arrow keys and Enter, or press a number to select an option.
 
-Tren Windows PowerShell:
+## Windows
+
+Install the launcher once from PowerShell:
 
 ```powershell
 irm https://raw.githubusercontent.com/dat-hoangnguyentuandat/basekit/main/install.ps1 | iex
 ```
 
-Yeu cau Node.js 18 tro len. Ban POSIX can them `curl` va `tar`.
+Open a new terminal, change to a project directory, and run `basekit`.
 
-## Cai khong tuong tac
+## Launcher Commands
 
-Dung trong CI hoac khi da biet provider:
-
-```sh
-curl -fsSL https://raw.githubusercontent.com/dat-hoangnguyentuandat/basekit/main/install.sh \
-  | BASEKIT_PROVIDER=codex sh
-```
-
-Gia tri hop le cua `BASEKIT_PROVIDER` la `claude`, `codex`, hoac `both`. Co the
-tro toi du an khac bang `BASEKIT_TARGET`:
+The menu is the default experience, but direct commands are available for
+scripts and automation:
 
 ```sh
-curl -fsSL https://raw.githubusercontent.com/dat-hoangnguyentuandat/basekit/main/install.sh \
-  | BASEKIT_PROVIDER=both BASEKIT_TARGET=/path/to/project sh
+basekit claude
+basekit codex
+basekit both
+basekit codex --target /path/to/project
+basekit --help
+basekit --version
 ```
 
-## Noi dung duoc cai
+The target defaults to the current working directory. The launcher requires
+Node.js 18 or newer. The POSIX bootstrap also requires `curl` and `tar`.
 
-### Claude Code
+## Installation Behavior
 
-- Agents, commands, hooks, rules, workflows, scripts va skills trong `.claude/`.
-- Cau hinh `.claude/.bk.json` va `.claude/.bkignore`.
-- Hooks va status line duoc merge vao `.claude/settings.json`.
+BaseKit does not require `.claude` or `.codex` to exist beforehand. It creates
+missing provider directories and merges into existing ones.
 
-### Codex
+Every provider installation records managed file hashes in a manifest. On a
+later run:
 
-- Codex agents da chuyen sang TOML trong `.codex/agents/`.
-- Skills va commands da chuyen doi trong `.agents/skills/`, la vi tri Codex doc
-  skill theo scope repository.
-- Rules va workflows duoc merge vao `AGENTS.md` trong khoi co marker BaseKit.
-- Agent registry duoc merge vao `.codex/config.toml`.
-- Payload ho tro nam trong `.codex/basekit/`.
+- Unmodified BaseKit files are updated.
+- Existing user files are preserved.
+- User-modified BaseKit files are not overwritten.
+- Incoming conflicting files are written under `.basekit/conflicts` for review.
+- Generated settings blocks are merged idempotently instead of duplicated.
 
-## Cap nhat va xung dot
+### Claude Code Layout
 
-Chay lai dung lenh cai dat de cap nhat. Manifest duoc luu tai
-`.claude/.basekit/manifest.json` hoac `.codex/.basekit/manifest.json`.
+Claude Code receives:
 
-- File BaseKit chua bi sua se duoc cap nhat.
-- File cua nguoi dung khong bi xoa.
-- Neu file BaseKit da duoc tuy bien, installer giu ban hien tai va dat ban moi
-  trong thu muc `.basekit/conflicts/` de review thu cong.
-- Cac khoi BaseKit trong `AGENTS.md`, `.codex/config.toml` va hook Claude duoc
-  merge theo cach idempotent, khong nhan doi sau moi lan chay.
+- Agents, commands, hooks, rules, workflows, scripts, and skills in `.claude/`.
+- BaseKit configuration in `.claude/.bk.json`.
+- BaseKit ignore patterns in `.claude/.bkignore`.
+- Hook registrations and the status line merged into `.claude/settings.json`.
+- Installation state in `.claude/.basekit/manifest.json`.
 
-## Luu y giay phep
+### Codex Layout
 
-Bon skill tai lieu Anthropic `docx`, `pdf`, `pptx` va `xlsx` khong nam trong
-repository cong khai vi license kem theo cam tao ban phai sinh va phan phoi cho
-ben thu ba. Installer khong xoa cac ban da ton tai tren may nguoi dung.
+Codex receives:
 
-Thong tin license cua cac skill ben thu ba con lai nam trong tung thu muc skill
-va tai [`engineer/skills/THIRD_PARTY_NOTICES.md`](engineer/skills/THIRD_PARTY_NOTICES.md).
+- Converted agent TOML files in `.codex/agents/`.
+- Agent registrations merged into `.codex/config.toml`.
+- Repository skills and converted command skills in `.agents/skills/`.
+- Rules and workflows merged into the repository `AGENTS.md`.
+- Supporting payload files in `.codex/basekit/`.
+- Installation state in `.codex/.basekit/manifest.json`.
+
+## Updating BaseKit
+
+Re-run the one-time bootstrap command to refresh the installed launcher and its
+bundled kit. Then run `basekit` inside each project that should receive the
+updated files. Project customizations continue to follow the conflict rules
+above.
+
+The previous launcher payload is retained as `app.previous` under the BaseKit
+user installation directory during an update.
+
+## Development
+
+Run the installer and launcher test suites with Node.js:
+
+```sh
+node --test tests/*.test.mjs
+```
+
+Test the launcher directly from a checkout:
+
+```sh
+node bin/basekit.mjs
+node bin/basekit.mjs codex --target ./example-project
+```
+
+## Licensing and Attribution
+
+BaseKit combines original launcher code, adapted toolkit material, and
+third-party skills under different licenses. No single license should be
+assumed to cover every file in the repository.
+
+See [NOTICE](NOTICE) for copyright ownership, upstream attribution, excluded
+proprietary materials, and the license location for each bundled component.
+Detailed dependency notices are retained in
+[`engineer/skills/THIRD_PARTY_NOTICES.md`](engineer/skills/THIRD_PARTY_NOTICES.md).

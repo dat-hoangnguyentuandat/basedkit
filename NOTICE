@@ -1,0 +1,161 @@
+BaseKit Copyright and Third-Party Notices
+=========================================
+
+This distribution contains original BaseKit launcher and installation code,
+adapted toolkit material, and independently licensed third-party components.
+Copyright remains with the respective copyright holders. This notice does not
+replace, expand, or restrict the license terms shipped with each component.
+
+BaseKit
+-------
+
+Copyright (c) 2026 BaseKit contributors.
+
+The BaseKit name, launcher, provider conversion layer, bootstrap scripts, and
+project merge implementation include modifications created for this
+distribution. BaseKit does not claim ownership of upstream or third-party
+materials identified below.
+
+ClaudeKit upstream attribution
+------------------------------
+
+Portions of the engineering toolkit were adapted from the ClaudeKit ecosystem
+maintained by Duy Nguyen (GitHub user mrgoonie) and its contributors:
+
+  https://github.com/mrgoonie/claudekit-cli
+  https://github.com/mrgoonie/claudekit-skills
+
+The ClaudeKit CLI is distributed under the MIT License:
+
+  Copyright (c) 2024 Duy Nguyen
+  License: MIT
+  License source: https://github.com/mrgoonie/claudekit-cli/blob/main/LICENSE
+
+The public ClaudeKit skills collection did not expose a repository-wide
+license file when this notice was prepared. Individual skill license files and
+frontmatter declarations remain controlling for the corresponding files.
+ClaudeKit and its associated names and marks belong to their respective
+owners. BaseKit is an independent adaptation and is not represented as an
+official ClaudeKit release.
+
+Bundled skill notices
+---------------------
+
+1. Hallmark
+
+   Copyright (c) 2026 Hallmark contributors
+   License: MIT
+   License file: engineer/skills/hallmark/LICENSE
+
+2. SEO skill
+
+   Copyright (c) 2026 AgriciDaniel
+   License: MIT
+   Upstream: https://github.com/AgriciDaniel/claude-seo
+   License file: engineer/skills/seo/LICENSE.txt
+
+   Some SEO Flow framework and prompt material identifies:
+
+   Copyright (c) Daniel Agrici
+   License: Creative Commons Attribution 4.0 International (CC BY 4.0)
+   Source: https://github.com/AgriciDaniel/flow
+
+3. Frontend Design skill
+
+   Copyright remains with Anthropic, PBC and the upstream contributors.
+   License: Apache License 2.0
+   Upstream: https://github.com/anthropics/skills/tree/main/skills/frontend-design
+   License file: engineer/skills/frontend-design/LICENSE.txt
+
+4. MCP Builder skill
+
+   License: Apache License 2.0
+   License file: engineer/skills/mcp-builder/LICENSE.txt
+
+5. Skill Creator skill
+
+   License: Apache License 2.0
+   License file: engineer/skills/skill-creator/LICENSE.txt
+
+6. UI Styling skill
+
+   License: Apache License 2.0
+   License file: engineer/skills/ui-styling/LICENSE.txt
+
+7. Chrome DevTools skill
+
+   License declaration: Apache License 2.0
+   Declaration file: engineer/skills/chrome-devtools/SKILL.md
+
+8. Sequential Thinking skill
+
+   Converted from the Model Context Protocol sequential-thinking server.
+   Copyright remains with the original server contributors.
+   License declaration: MIT
+   Upstream: https://github.com/modelcontextprotocol/servers/tree/main/src/sequentialthinking
+
+9. Other skills with MIT declarations
+
+   The following bundled skills declare the MIT License in their SKILL.md or
+   package metadata: ai-multimodal, backend-development, better-auth,
+   databases, devops, docs-seeker, google-adk-python, media-processing,
+   mobile-development, payment-integration, planning, plugin-cms, research,
+   theme-cms, threejs, web-frameworks, website-sitemap, and widget-cms.
+   Copyright remains with each component's authors and contributors.
+
+Fonts
+-----
+
+Font files under engineer/skills/ui-styling/canvas-fonts are distributed under
+the SIL Open Font License terms included beside the corresponding fonts. The
+bundled families include Arsenal SC, Big Shoulders, Boldonse, Bricolage
+Grotesque, Crimson Pro, DM Mono, Erica One, Geist Mono, Gloock, IBM Plex Mono,
+Instrument Sans, Italiana, JetBrains Mono, Jura, Libre Baskerville, Lora,
+National Park, Nothing You Could Do, Outfit, Pixelify Sans, Poiret One,
+Red Hat Mono, Silkscreen, Smooch Sans, Tektur, Work Sans, and Young Serif.
+
+Media and Python dependency notices
+-----------------------------------
+
+The retained third-party notice file includes the applicable license text and
+copyright notices for components used by media-related skills, including:
+
+  imageio 2.37.0
+  Copyright (c) 2014-2022 imageio developers
+  License: BSD 2-Clause
+
+  imageio-ffmpeg 0.6.0
+  Copyright (c) 2019-2025 imageio contributors
+  License: BSD 2-Clause
+
+  FFmpeg 7.0.2
+  Copyright (c) 2000-2024 FFmpeg developers
+  License notice retained as GNU GPL version 3 in the bundled notice file
+  Source: https://ffmpeg.org/releases/ffmpeg-7.0.2.tar.xz
+
+Full retained text:
+
+  engineer/skills/THIRD_PARTY_NOTICES.md
+
+Anthropic proprietary document skills
+--------------------------------------
+
+The source installation used to prepare this repository contained Anthropic
+document skills for DOCX, PDF, PPTX, and XLSX with the following notice:
+
+  Copyright (c) 2025 Anthropic, PBC. All rights reserved.
+
+Their license prohibits extraction, derivative works, and third-party
+distribution. Those four skill directories are intentionally excluded from
+the public BaseKit repository and from the installer. BaseKit does not grant
+any rights to those materials and does not remove separately authorized local
+copies already present on a user's machine.
+
+General dependency notice
+-------------------------
+
+Some skill scripts install or invoke additional packages and command-line
+tools at runtime. Those dependencies are not relicensed by BaseKit. Their own
+copyright notices and license terms apply when installed. Preserve all LICENSE,
+NOTICE, COPYING, and attribution files included in this repository and in any
+runtime dependencies.
