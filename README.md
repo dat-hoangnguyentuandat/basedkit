@@ -179,5 +179,3 @@ assumed to cover every file in the repository.
 
 See [NOTICE](NOTICE) for copyright ownership, upstream attribution, excluded
 proprietary materials, and the license location for each bundled component.
-Detailed dependency notices are retained in
-[`engineer/skills/THIRD_PARTY_NOTICES.md`](engineer/skills/THIRD_PARTY_NOTICES.md).
