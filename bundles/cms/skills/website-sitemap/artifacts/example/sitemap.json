@@ -1,59 +1,73 @@
 {
-  "startUrl": "https://example.com/",
-  "origin": "https://example.com",
-  "generatedAt": "2026-05-21T14:36:34.722Z",
+  "schemaVersion": "2.0",
+  "generatedAt": "2026-08-02T10:00:00.000Z",
+  "source": {
+    "mode": "brief",
+    "inputs": [{ "type": "brief", "reference": "inline", "authoritative": true }],
+    "confidence": "medium",
+    "assumptions": ["Lead-generation website"],
+    "gaps": ["Service list and opening hours unavailable"]
+  },
+  "site": {
+    "name": "Nha Khoa Kim Ngân",
+    "slug": "nha-khoa-kim-ngan",
+    "locale": "vi-VN",
+    "businessType": "dental-clinic",
+    "goals": ["Generate appointment enquiries"],
+    "audiences": ["Local dental patients"]
+  },
+  "design": {
+    "direction": "Clean, reassuring local healthcare",
+    "tone": ["professional", "warm"],
+    "palette": {},
+    "typography": {},
+    "imagery": ["Authentic clinic and team photography"]
+  },
+  "navigation": {
+    "header": [
+      { "label": "Trang chủ", "route": "/", "type": "internal" },
+      { "label": "Dịch vụ", "route": "/dich-vu", "type": "internal" }
+    ],
+    "footer": [{ "label": "Liên hệ", "route": "/lien-he", "type": "internal" }]
+  },
+  "templates": [
+    { "id": "home", "type": "home", "purpose": "Introduce and convert", "regions": ["main"] },
+    { "id": "service-listing", "type": "listing", "purpose": "Present services", "regions": ["main"] },
+    { "id": "contact", "type": "contact", "purpose": "Capture enquiries", "regions": ["main"] }
+  ],
   "pages": [
     {
-      "url": "https://example.com/",
-      "status": 200,
-      "title": "Example Domain",
-      "metaDescription": "",
-      "canonical": "https://example.com/",
-      "lang": "en",
-      "h1": [
-        "Example Domain"
-      ],
-      "section": "/",
-      "internalLinks": [],
-      "externalLinks": [
-        "https://iana.org/domains/example"
-      ],
-      "linkDetails": [
-        {
-          "url": "https://iana.org/domains/example",
-          "text": "Learn more"
-        }
-      ],
-      "forms": [],
-      "assets": {
-        "images": [],
-        "scripts": [],
-        "stylesheets": [],
-        "iframes": []
-      },
-      "assetCounts": {
-        "images": 0,
-        "scripts": 0,
-        "stylesheets": 0,
-        "iframes": 0
-      }
+      "id": "home",
+      "name": "Trang chủ",
+      "route": "/",
+      "template": "home",
+      "purpose": "Introduce the clinic and build trust",
+      "seo": { "title": "Nha Khoa Kim Ngân", "description": "", "primaryKeyword": "nha khoa Pleiku" },
+      "sections": [{ "id": "hero", "type": "hero", "purpose": "Communicate the main offer", "contentSource": "content.business", "responsive": "Stack content and CTA on mobile" }],
+      "dataSources": ["business", "services", "reviews"]
+    },
+    {
+      "id": "services",
+      "name": "Dịch vụ",
+      "route": "/dich-vu",
+      "template": "service-listing",
+      "purpose": "Help visitors explore treatments",
+      "seo": { "title": "Dịch vụ nha khoa", "description": "", "primaryKeyword": "dịch vụ nha khoa" },
+      "sections": [{ "id": "service-grid", "type": "listing", "purpose": "List available services", "contentSource": "content.services", "responsive": "Three columns desktop, one column mobile" }],
+      "dataSources": ["services"]
+    },
+    {
+      "id": "contact",
+      "name": "Liên hệ",
+      "route": "/lien-he",
+      "template": "contact",
+      "purpose": "Capture appointment enquiries",
+      "seo": { "title": "Liên hệ Nha Khoa Kim Ngân", "description": "", "primaryKeyword": "liên hệ nha khoa" },
+      "sections": [{ "id": "contact-form", "type": "form", "purpose": "Request an appointment", "contentSource": "content.business", "responsive": "Form below contact details on mobile", "fields": ["name", "phone", "message"] }],
+      "dataSources": ["business"]
     }
   ],
-  "skipped": [],
-  "warnings": [],
-  "sections": {
-    "/": 1
-  },
-  "duplicates": {
-    "titles": {
-      "Example Domain": [
-        "https://example.com/"
-      ]
-    },
-    "canonicals": {
-      "https://example.com/": [
-        "https://example.com/"
-      ]
-    }
-  }
+  "content": { "_provenance": { "business": "supplied", "services": "placeholder", "reviews": "placeholder" }, "business": { "name": "Nha Khoa Kim Ngân" }, "services": [], "reviews": [] },
+  "cms": { "capabilities": ["services", "contacts", "testimonials"], "models": ["services", "contacts", "testimonials"], "zones": ["header", "homepage", "footer_1", "footer_2", "footer_3", "float_left", "float_right"] },
+  "stitch": { "screens": ["home", "services", "contact"], "promptFile": "stitch-prompt.md" }
 }

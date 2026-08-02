@@ -1,71 +1,79 @@
 ---
 name: website-sitemap
-description: "Map any website into a clone-ready sitemap with pages, templates, navigation, assets, forms, and crawl gaps for same-origin URLs."
+description: "This skill should be used to create, crawl, map, redesign, or migrate website sitemaps and information architecture from briefs, ERP data, URLs, documents, or mixed inputs."
 license: MIT
-version: 1.0.0
 ---
 
-# Website Sitemap
+# Website Sitemap Architect
 
-Use when the user gives a website URL and wants a detailed sitemap for cloning, reverse engineering, redesign, migration, IA review, or content inventory.
+Transform sparse or detailed inputs into a complete, implementation-ready website architecture. Accept natural-language briefs, ERP/task content, structured files, documents, existing website URLs, or any combination. Produce one stable sitemap contract for design agents, Google Stitch, and CMS theme builders.
 
-## What this skill produces
+## Load References By Input
 
-Create a folder like `artifacts/sitemaps/<host>/` containing:
-- `sitemap.json` - machine-readable crawl output
-- `sitemap.md` - human summary for cloning
-- optional follow-up notes for JS-only or gated pages
+1. Read [input-modes.md](references/input-modes.md) for every task.
+2. Read [sitemap-contract.md](references/sitemap-contract.md) before creating `sitemap.json`.
+3. Read [generation-rules.md](references/generation-rules.md) for brief, ERP, document, and hybrid inputs.
+4. Read [clone-audit.md](references/clone-audit.md) and run the crawler only when an existing URL is an input.
+5. Read [stitch-handoff.md](references/stitch-handoff.md) before producing design handoff files.
 
-## Workflow
+## Required Workflow
 
-1. Normalize the input URL, keep the original path if the user targets a subsection.
-2. Crawl same-origin pages first. Prefer the provided script:
-   - `node scripts/crawl_site.js --url <URL> --out <DIR>`
-   - Add `--max-pages 300` for larger sites
-   - Add `--subtree-only` when user wants only one section
-3. Seed discovery from:
-   - input page links
-   - `/sitemap.xml`
-   - `robots.txt` sitemap entries
-   - canonical links and nav/footer links found during crawl
-4. After crawl, inspect `sitemap.md` and `sitemap.json` for gaps:
-   - JS-rendered routes not present in raw HTML
-   - auth-gated flows
-   - search/filter/facet states
-   - API-backed content grids
-5. If gaps matter, supplement manually with browser tooling, then append notes instead of pretending the crawl was complete.
+1. Classify inputs as `brief`, `structured`, `crawl`, or `hybrid`; preserve source facts and mark assumptions.
+2. Extract business identity, audience, goals, offers, trust signals, contact data, content, assets, constraints, and reference URLs.
+3. Resolve the CMS project root from the current workspace; write only under `artifacts/sitemaps/<site-slug>/` in that project.
+4. For URL inputs, crawl into the sitemap project's research subdirectory. Treat crawl output as evidence, never as the final architecture.
+5. Infer the smallest complete information architecture suitable for the business and goals. Do not ask for details that can be safely inferred and labeled.
+6. Define navigation, routes, reusable templates, page sections, CTAs, forms, content collections, CMS capabilities, SEO intent, and responsive design direction.
+7. Preserve supplied facts exactly. Never invent factual prices, credentials, addresses, ratings, guarantees, legal claims, or contact details.
+8. Create the required outputs and validate `sitemap.json` with `scripts/validate_sitemap.js`.
+9. Resolve validation failures before handoff. Report assumptions, missing facts, crawl gaps, and confidence.
 
-## Required analysis
+## URL Crawl
 
-For each crawl, report:
-- page groups by template or section
-- nav structure and important user flows
-- titles, meta descriptions, canonicals, H1s
-- internal links, external links, images, scripts, stylesheets, iframes
-- forms, buttons, and likely interactive areas
-- orphan candidates, redirects, broken pages, duplicate titles, duplicate canonicals
-- clone risks: JS app shell, lazy content, gated content, locale variants
+Run deterministic discovery when a public URL is provided:
 
-## Output standard
+```bash
+node <SKILL_DIR>/scripts/crawl_site.js --url <URL> --out <CMS_PROJECT>/artifacts/sitemaps/<site-slug>/research/crawl
+```
 
-`sitemap.md` should include:
-- scope and crawl settings
-- top-level section tree
-- page inventory table or bullets
-- reusable template clusters
-- asset inventory summary
-- forms/interactions summary
-- crawl gaps and confidence level
+Use `--max-pages 300` for large sites and `--subtree-only` for a targeted section. Supplement JS-only, authenticated, or API-backed gaps with browser tools. Do not claim complete coverage when blocked.
 
-## Notes
+## Required Outputs
 
-- Stay on the same origin unless the user asks for cross-domain mapping.
-- Respect clear rate limits or blocking.
-- For huge sites, crawl a representative sample first and say what remains.
-- If the user wants a pure XML sitemap only, derive it from `sitemap.json` instead of reclawing.
+Create one folder per website inside the current CMS project. The required root is `<CMS_PROJECT>/artifacts/sitemaps`; never write final sitemap artifacts inside the skill directory, a user home directory, or an unrelated workspace.
 
-## References
+```text
+<CMS_PROJECT>/artifacts/sitemaps/<site-slug>/
+├── sitemap.json
+├── sitemap.md
+├── stitch-prompt.md
+└── research/              # only when source evidence exists
+```
 
-- `references/clone-audit.md` - how to turn crawl output into a clone plan
-- `scripts/crawl_site.js` - deterministic crawler
-- `scripts/test_crawl_site.js` - smoke tests for parser helpers
+- `sitemap.json`: canonical machine-readable architecture defined in `sitemap-contract.md`.
+- `sitemap.md`: concise human review of pages, templates, navigation, content, assumptions, and risks.
+- `stitch-prompt.md`: design-generation brief grounded in the sitemap; no new pages or facts.
+- `research/`: raw crawl, ERP export, source notes, or normalized evidence when useful.
+
+For this CMS workspace, an example output is `E:\Project\cms\artifacts\sitemaps\nha-khoa-kim-ngan\sitemap.json`. Create missing directories as needed. Reuse the same slug folder for revisions instead of creating version-suffixed duplicates unless explicitly requested.
+
+## Quality Gates
+
+- Every header/footer destination resolves to a declared route or supplied external URL.
+- Every page references a declared template and contains purposeful sections.
+- Homepage communicates identity, offer, trust, and one primary action.
+- Detail/listing routes exist only when the content model needs them.
+- Forms define purpose and fields; commerce is declared when products, prices, ordering, or buying appear.
+- Mobile navigation, responsive section behavior, empty states, and scalable listing behavior are specified.
+- Source facts, inferred content, placeholders, and unavailable facts remain distinguishable.
+- Output gives `theme-cms` enough information to map routes, widgets, models, zones, seed content, and capabilities.
+
+## Validation
+
+```bash
+node <SKILL_DIR>/scripts/validate_sitemap.js <CMS_PROJECT>/artifacts/sitemaps/<site-slug>/sitemap.json --project-root <CMS_PROJECT>
+node scripts/test_validate_sitemap.js
+node scripts/test_crawl_site.js
+```
+
+Do not hand off an invalid sitemap or hide unresolved Critical/High gaps.

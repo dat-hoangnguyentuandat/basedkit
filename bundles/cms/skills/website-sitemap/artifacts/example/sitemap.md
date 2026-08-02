@@ -1,23 +1,22 @@
-# Sitemap report: https://example.com
+# Sitemap: Nha Khoa Kim Ngân
 
-- Start URL: https://example.com/
-- Pages crawled: 1
-- Skipped URLs: 0
-- Generated: 2026-05-21T14:36:34.722Z
+- Input: one-line natural-language brief
+- Mode: brief
+- Confidence: medium
+- Goal: local appointment enquiries
 
-## Sections
-- /: 1 page(s)
+## Navigation
 
-## Pages
-- https://example.com/
-  - title: Example Domain
-  - h1: Example Domain
-  - links: 0 internal, 1 external
-  - assets: 0 img, 0 css, 0 js, 0 iframe
+Trang chủ → Dịch vụ → Liên hệ
 
-## Duplicates
-- Duplicate titles: 0
-- Duplicate canonicals: 0
+## Templates and pages
 
-## Crawl gaps / warnings
-- none
+- Home: identity, services, trust, reviews, primary CTA.
+- Service listing: scalable treatment grid with empty state.
+- Contact: verified contact facts and appointment enquiry form.
+
+## Assumptions and gaps
+
+- Assume lead generation, not online commerce.
+- Service list, opening hours, team, credentials, and brand assets require authoritative input.
+- Do not invent medical claims, outcomes, ratings, or credentials.
