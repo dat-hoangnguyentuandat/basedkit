@@ -1,47 +1,54 @@
 [CmdletBinding()]
 param(
-    [ValidateSet('claude', 'codex', 'both')]
-    [string]$Provider = $env:BASEKIT_PROVIDER,
-    [string]$Target = $(if ($env:BASEKIT_TARGET) { $env:BASEKIT_TARGET } else { (Get-Location).Path }),
-    [string]$Ref = $(if ($env:BASEKIT_REF) { $env:BASEKIT_REF } else { 'main' })
+    [string]$Ref = $(if ($env:BASEKIT_REF) { $env:BASEKIT_REF } else { 'main' }),
+    [string]$InstallRoot = $(if ($env:BASEKIT_HOME) { $env:BASEKIT_HOME } else { Join-Path $env:LOCALAPPDATA 'BaseKit' }),
+    [string]$SourceDir = $env:BASEKIT_SOURCE_DIR
 )
 
 $ErrorActionPreference = 'Stop'
 $repository = if ($env:BASEKIT_REPOSITORY) { $env:BASEKIT_REPOSITORY } else { 'dat-hoangnguyentuandat/basekit' }
-$sourceDir = $env:BASEKIT_SOURCE_DIR
 $tempDir = $null
 
-if (-not $Provider) {
-    Write-Host "BaseKit target: $Target"
-    Write-Host '1) Claude Code'
-    Write-Host '2) Codex'
-    Write-Host '3) Both'
-    $choice = Read-Host 'Choose a provider [1-3]'
-    $Provider = switch ($choice) {
-        '1' { 'claude' }
-        '2' { 'codex' }
-        '3' { 'both' }
-        default { throw "Invalid provider selection: $choice" }
-    }
-}
-
 if (-not (Get-Command node -ErrorAction SilentlyContinue)) {
-    throw 'Node.js 18 or newer is required to install BaseKit safely.'
+    throw 'Node.js 18 or newer is required.'
 }
+$nodeMajor = [int]((& node -p "process.versions.node.split('.')[0]").Trim())
+if ($nodeMajor -lt 18) { throw 'Node.js 18 or newer is required.' }
 
 try {
-    if (-not $sourceDir) {
+    if (-not $SourceDir) {
         $tempDir = Join-Path ([IO.Path]::GetTempPath()) "basekit-$([guid]::NewGuid())"
         New-Item -ItemType Directory -Path $tempDir | Out-Null
         $archive = Join-Path $tempDir 'basekit.zip'
         Invoke-WebRequest "https://github.com/$repository/archive/refs/heads/$Ref.zip" -OutFile $archive
         Expand-Archive $archive -DestinationPath $tempDir
-        $sourceDir = (Get-ChildItem $tempDir -Directory | Select-Object -First 1).FullName
+        $SourceDir = (Get-ChildItem $tempDir -Directory | Select-Object -First 1).FullName
     }
-    New-Item -ItemType Directory -Force -Path $Target | Out-Null
-    & node (Join-Path $sourceDir 'installer/install.mjs') --source $sourceDir --target $Target --provider $Provider
-    if ($LASTEXITCODE -ne 0) { throw "BaseKit installer exited with code $LASTEXITCODE" }
-    Write-Host "BaseKit installed for $Provider in $Target"
+
+    New-Item -ItemType Directory -Force -Path $InstallRoot | Out-Null
+    $appDir = Join-Path $InstallRoot 'app'
+    $stagedApp = Join-Path $InstallRoot "app.new.$PID"
+    $previousApp = Join-Path $InstallRoot 'app.previous'
+    Copy-Item -Recurse -Force -Path $SourceDir -Destination $stagedApp
+    if (Test-Path $previousApp) { Remove-Item -Recurse -Force -LiteralPath $previousApp }
+    if (Test-Path $appDir) { Move-Item -LiteralPath $appDir -Destination $previousApp }
+    Move-Item -LiteralPath $stagedApp -Destination $appDir
+
+    $binDir = Join-Path $InstallRoot 'bin'
+    New-Item -ItemType Directory -Force -Path $binDir | Out-Null
+    $launcher = Join-Path $appDir 'bin\basekit.mjs'
+    $cmd = "@echo off`r`nnode `"$launcher`" %*`r`n"
+    Set-Content -Path (Join-Path $binDir 'basekit.cmd') -Value $cmd -Encoding ascii -NoNewline
+
+    $userPath = [Environment]::GetEnvironmentVariable('Path', 'User')
+    $parts = @($userPath -split ';' | Where-Object { -not [string]::IsNullOrWhiteSpace($_) })
+    if ($parts -notcontains $binDir) {
+        [Environment]::SetEnvironmentVariable('Path', (($parts + $binDir) -join ';'), 'User')
+    }
+    if (($env:Path -split ';') -notcontains $binDir) { $env:Path = "$env:Path;$binDir" }
+
+    Write-Host "BaseKit launcher installed at $(Join-Path $binDir 'basekit.cmd')" -ForegroundColor Green
+    Write-Host 'Open a new terminal, enter a project directory, and run: basekit' -ForegroundColor Green
 } finally {
     if ($tempDir -and (Test-Path $tempDir)) { Remove-Item -Recurse -Force -LiteralPath $tempDir }
 }
