@@ -15,6 +15,7 @@ test('prints launcher help and version', () => {
   const version = execFileSync(process.execPath, [launcher, '--version'], { encoding: 'utf8' });
   assert.match(help, /basekit claude/);
   assert.match(help, /basekit codex/);
+  assert.match(help, /basekit update --check/);
   assert.match(version, /^basekit \d+\.\d+\.\d+/);
 });
 
