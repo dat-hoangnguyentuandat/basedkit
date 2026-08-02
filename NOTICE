@@ -45,14 +45,14 @@ Bundled skill notices
 
    Copyright (c) 2026 Hallmark contributors
    License: MIT
-   License file: engineer/skills/hallmark/LICENSE
+   License file: bundles/ui-ux/skills/hallmark/LICENSE
 
 2. SEO skill
 
    Copyright (c) 2026 AgriciDaniel
    License: MIT
    Upstream: https://github.com/AgriciDaniel/claude-seo
-   License file: engineer/skills/seo/LICENSE.txt
+   License file: bundles/cms/skills/seo/LICENSE.txt
 
    Some SEO Flow framework and prompt material identifies:
 

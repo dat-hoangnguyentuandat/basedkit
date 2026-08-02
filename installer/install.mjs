@@ -2,7 +2,7 @@
 
 import { createHash } from 'node:crypto';
 import { existsSync } from 'node:fs';
-import { chmod, mkdir, readFile, readdir, stat, writeFile } from 'node:fs/promises';
+import { chmod, mkdir, readFile, readdir, rmdir, stat, unlink, writeFile } from 'node:fs/promises';
 import path from 'node:path';
 
 const MANIFEST_VERSION = 1;
@@ -66,6 +66,30 @@ async function listFiles(root, relative = '') {
   return files;
 }
 
+async function loadBundleCatalog(sourceRoot) {
+  const bundlesRoot = path.join(sourceRoot, 'bundles');
+  if (!existsSync(bundlesRoot)) return [];
+  const entries = await readdir(bundlesRoot, { withFileTypes: true });
+  const bundles = [];
+  for (const entry of entries) {
+    if (!entry.isDirectory()) continue;
+    const bundleRoot = path.join(bundlesRoot, entry.name);
+    const metadataPath = path.join(bundleRoot, 'bundle.json');
+    if (!existsSync(metadataPath)) continue;
+    const metadata = await readJson(metadataPath, null);
+    if (!metadata || metadata.id !== entry.name || !metadata.name || !metadata.description) {
+      throw new Error(`Invalid bundle metadata at ${metadataPath}`);
+    }
+    bundles.push({
+      ...metadata,
+      order: Number(metadata.order) || 100,
+      root: bundleRoot,
+      skillsRoot: path.join(bundleRoot, 'skills'),
+    });
+  }
+  return bundles.sort((left, right) => left.order - right.order || left.name.localeCompare(right.name));
+}
+
 function transformCodexText(content) {
   return content
     .replaceAll('$HOME/.claude/skills', '.agents/skills')
@@ -91,13 +115,13 @@ function maybeTransformCodex(buffer, sourceRelative) {
 }
 
 class ManagedInstaller {
-  constructor(targetRoot, manifestPath, provider) {
+  constructor(targetRoot, manifestPath, provider, bundles) {
     this.targetRoot = targetRoot;
     this.manifestPath = manifestPath;
     this.provider = provider;
     this.previous = { files: {} };
-    this.next = { version: MANIFEST_VERSION, provider, files: {} };
-    this.summary = { installed: 0, updated: 0, unchanged: 0, conflicts: 0 };
+    this.next = { version: MANIFEST_VERSION, provider, bundles, files: {} };
+    this.summary = { installed: 0, updated: 0, unchanged: 0, removed: 0, conflicts: 0, modifiedPreserved: 0 };
   }
 
   async initialize() {
@@ -146,7 +170,31 @@ class ManagedInstaller {
     await this.installBuffer(targetRelative, content, sourceInfo.mode);
   }
 
+  async removeStaleFiles() {
+    for (const [relative, previousHash] of Object.entries(this.previous.files || {})) {
+      if (this.next.files[relative]) continue;
+      const destination = path.resolve(this.targetRoot, relative);
+      const targetPrefix = `${path.resolve(this.targetRoot)}${path.sep}`.toLowerCase();
+      if (!destination.toLowerCase().startsWith(targetPrefix)) throw new Error(`Unsafe stale path: ${relative}`);
+      if (!existsSync(destination)) continue;
+      const currentHash = sha256(await readFile(destination));
+      if (currentHash !== previousHash) {
+        this.summary.modifiedPreserved += 1;
+        continue;
+      }
+      await unlink(destination);
+      this.summary.removed += 1;
+      let parent = path.dirname(destination);
+      while (parent.toLowerCase().startsWith(targetPrefix) && parent !== this.targetRoot) {
+        if ((await readdir(parent)).length > 0) break;
+        await rmdir(parent);
+        parent = path.dirname(parent);
+      }
+    }
+  }
+
   async save() {
+    await this.removeStaleFiles();
     await writeJson(this.manifestPath, this.next);
   }
 }
@@ -234,19 +282,37 @@ async function mergeClaudeSettings(targetRoot) {
   await writeJson(settingsPath, settings);
 }
 
-async function installClaude(engineerRoot, targetRoot) {
+async function installBundleSkills(managed, bundles, provider) {
+  for (const bundle of bundles) {
+    if (!existsSync(bundle.skillsRoot)) continue;
+    for (const relative of await listFiles(bundle.skillsRoot)) {
+      const target = provider === 'claude'
+        ? path.join('.claude', 'skills', relative)
+        : path.join('.agents', 'skills', relative);
+      await managed.installFile(
+        path.join(bundle.skillsRoot, relative),
+        target,
+        provider === 'codex' ? (buffer) => maybeTransformCodex(buffer, `skills/${normalizeRelative(relative)}`) : undefined,
+      );
+    }
+  }
+}
+
+async function installClaude(engineerRoot, targetRoot, bundles, bundleIds) {
   const claudeRoot = path.join(targetRoot, '.claude');
   await mkdir(claudeRoot, { recursive: true });
   const managed = new ManagedInstaller(
     targetRoot,
     path.join(claudeRoot, '.basekit', 'manifest.json'),
     'claude',
+    bundleIds,
   );
   await managed.initialize();
   for (const relative of await listFiles(engineerRoot)) {
     if (isExcluded(relative)) continue;
     await managed.installFile(path.join(engineerRoot, relative), path.join('.claude', relative));
   }
+  await installBundleSkills(managed, bundles, 'claude');
   await mergeClaudeSettings(targetRoot);
   await managed.save();
   return managed.summary;
@@ -266,13 +332,14 @@ async function buildCodexInstructions(engineerRoot) {
   return content.join('\n');
 }
 
-async function installCodex(engineerRoot, targetRoot) {
+async function installCodex(engineerRoot, targetRoot, bundles, bundleIds) {
   const codexRoot = path.join(targetRoot, '.codex');
   await mkdir(codexRoot, { recursive: true });
   const managed = new ManagedInstaller(
     targetRoot,
     path.join(codexRoot, '.basekit', 'manifest.json'),
     'codex',
+    bundleIds,
   );
   await managed.initialize();
 
@@ -297,6 +364,7 @@ async function installCodex(engineerRoot, targetRoot) {
       );
     }
   }
+  await installBundleSkills(managed, bundles, 'codex');
 
   const agentEntries = [];
   for (const relative of sourceFiles.filter((file) => normalizeRelative(file).startsWith('agents/'))) {
@@ -367,15 +435,21 @@ async function main() {
   const engineerRoot = path.join(sourceRoot, 'engineer');
   const targetRoot = path.resolve(args.target || process.cwd());
   const provider = (args.provider || '').toLowerCase();
+  const catalog = await loadBundleCatalog(sourceRoot);
+  const requestedBundleIds = (args.bundles || 'base').split(',').map((value) => value.trim()).filter(Boolean);
+  const bundleIds = [...new Set(['base', ...requestedBundleIds.filter((id) => id !== 'base')])];
+  const unknownBundles = bundleIds.filter((id) => id !== 'base' && !catalog.some((bundle) => bundle.id === id));
+  if (unknownBundles.length) throw new Error(`Unknown bundles: ${unknownBundles.join(', ')}`);
+  const selectedBundles = catalog.filter((bundle) => bundleIds.includes(bundle.id));
   if (!existsSync(engineerRoot)) throw new Error(`Engineer kit not found at ${engineerRoot}`);
   if (!['claude', 'codex', 'both'].includes(provider)) {
     throw new Error('Provider must be claude, codex, or both');
   }
 
   const result = {};
-  if (provider === 'claude' || provider === 'both') result.claude = await installClaude(engineerRoot, targetRoot);
-  if (provider === 'codex' || provider === 'both') result.codex = await installCodex(engineerRoot, targetRoot);
-  console.log(JSON.stringify({ target: targetRoot, provider, result }, null, 2));
+  if (provider === 'claude' || provider === 'both') result.claude = await installClaude(engineerRoot, targetRoot, selectedBundles, bundleIds);
+  if (provider === 'codex' || provider === 'both') result.codex = await installCodex(engineerRoot, targetRoot, selectedBundles, bundleIds);
+  console.log(JSON.stringify({ target: targetRoot, provider, bundles: bundleIds, result }, null, 2));
 }
 
 main().catch((error) => {

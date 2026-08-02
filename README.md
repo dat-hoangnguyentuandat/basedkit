@@ -1,6 +1,7 @@
 # BaseKit
 
-BaseKit installs a shared engineering toolkit for Claude Code, Codex, or both.
+BaseKit installs a shared engineering toolkit for Claude Code, Codex, or all
+supported providers.
 It provides agents, reusable skills, commands, workflows, hooks, project rules,
 and supporting scripts while preserving existing project customizations.
 
@@ -22,8 +23,8 @@ The interactive launcher detects the current project and lets you choose:
 
 1. Claude Code
 2. Codex
-3. Both
-4. Check for Updates, or Update BaseKit when a newer revision is available
+3. All
+4. Check for Updates
 5. Exit
 
 Use the arrow keys and Enter, or press a number to select an option.
@@ -46,7 +47,8 @@ scripts and automation:
 ```sh
 basekit claude
 basekit codex
-basekit both
+basekit all
+basekit codex --bundles base,cms
 basekit update
 basekit update --check
 basekit codex --target /path/to/project
@@ -56,6 +58,40 @@ basekit --version
 
 The target defaults to the current working directory. The launcher requires
 Node.js 18 or newer. The POSIX bootstrap also requires `curl` and `tar`.
+
+## Bundle Selection
+
+Interactive provider choices open a bundle selection page. Base is always
+selected and additional bundles can be toggled with Space or Enter:
+
+- **Base**: Core agents, commands, hooks, workflows, and general engineering
+  skills. Base excludes every skill owned by an optional bundle.
+- **UI/UX**: Advanced interface design direction and implementation taste.
+  Currently provides `hallmark`.
+- **CMS**: CMS plugins, themes, widgets, sitemaps, and production SEO. Currently
+  provides `plugin-cms`, `seo`, `theme-cms`, `website-sitemap`, and `widget-cms`.
+
+Running Base again after previously selecting an optional bundle removes that
+bundle's unmodified managed files. Customized files are preserved.
+
+### Adding Bundles and Skills
+
+The launcher discovers optional bundles from the repository at runtime:
+
+```text
+bundles/
+  my-bundle/
+    bundle.json
+    skills/
+      my-skill/
+        SKILL.md
+```
+
+`bundle.json` defines `id`, `name`, `description`, and optional `order` fields.
+The folder name must match `id`. To add a skill to an existing choice, place its
+complete skill folder under that bundle's `skills/` directory. To create a new
+launcher choice, create another bundle folder with the same structure; no
+launcher code change is required.
 
 ## Installation Behavior
 
@@ -100,7 +136,10 @@ shows an update warning when they differ. Update checks are cached for 15
 minutes and time out quickly, so an offline or rate-limited GitHub request does
 not block project installation.
 
-Select the update item in the menu or run:
+The update choice opens a dedicated status page. It stays open after checking,
+shows an **Update Now** action only when a newer revision exists, and includes a
+**Back** action to return to the launcher. The same operations are available as
+commands:
 
 ```sh
 basekit update --check

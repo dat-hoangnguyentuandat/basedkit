@@ -1,0 +1,6 @@
+{
+  "id": "cms",
+  "name": "CMS",
+  "description": "CMS plugins, themes, widgets, sitemaps, and production SEO workflows.",
+  "order": 30
+}

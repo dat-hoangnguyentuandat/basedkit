@@ -54,10 +54,10 @@ mv "$STAGED_APP" "$INSTALL_ROOT/app"
 if [ -n "$RESOLVED_COMMIT" ]; then
   node "$INSTALL_ROOT/app/installer/write-release-metadata.mjs" \
     --app "$INSTALL_ROOT/app" --repository "$REPOSITORY" --ref "$REF" \
-    --version "1.1.0" --commit "$RESOLVED_COMMIT"
+    --version "1.2.0" --commit "$RESOLVED_COMMIT"
 else
   node "$INSTALL_ROOT/app/installer/write-release-metadata.mjs" \
-    --app "$INSTALL_ROOT/app" --repository "$REPOSITORY" --ref "$REF" --version "1.1.0"
+    --app "$INSTALL_ROOT/app" --repository "$REPOSITORY" --ref "$REF" --version "1.2.0"
 fi
 
 cat > "$BIN_DIR/basekit" <<EOF

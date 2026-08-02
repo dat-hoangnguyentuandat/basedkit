@@ -19,7 +19,7 @@ if (!args.app) throw new Error('--app is required');
 
 const metadata = {
   schemaVersion: 1,
-  version: args.version || '1.1.0',
+  version: args.version || '1.2.0',
   repository: args.repository || 'dat-hoangnguyentuandat/basekit',
   ref: args.ref || 'main',
   installedCommit: args.commit || null,

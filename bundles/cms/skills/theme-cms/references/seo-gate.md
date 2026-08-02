@@ -3,7 +3,7 @@
 Run the integrated SEO skill after activation, asset publish, cache clear, seed, and public server startup:
 
 ```text
-C:\Users\TDat\.basekit\engineer\skills\seo\SKILL.md
+.claude/skills/seo/SKILL.md
 ```
 
 Audit the rendered public URL, not Blade source alone. Use the relevant integrated modules: core `seo`, `seo-technical`, `seo-page`, `seo-schema`, `seo-sitemap`, and `seo-local` for local businesses; add content/images modules when findings require them.
