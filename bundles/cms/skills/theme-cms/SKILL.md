@@ -16,7 +16,8 @@ Create a complete installable theme for `C:\xampp\htdocs\cms`. Treat `themes\def
 2. Before writing `widgets.php`, load [widgets-registry.md](references/widgets-registry.md), [widget-schema.md](references/widget-schema.md), and [seed-data.md](references/seed-data.md).
 3. Before writing views/CSS, load [global-shell.md](references/global-shell.md), [frontend-quality.md](references/frontend-quality.md), [review-cards.md](references/review-cards.md), and [canonical-theme.md](references/canonical-theme.md).
 4. Before listing pages, load [pagination.md](references/pagination.md). Before publishing assets, load [assets-cache.md](references/assets-cache.md).
-5. Before handoff, load [seo-gate.md](references/seo-gate.md), [validation.md](references/validation.md), and [troubleshooting.md](references/troubleshooting.md).
+5. Before QA, load [deterministic-quality-gates.md](references/deterministic-quality-gates.md).
+6. Before handoff, load [seo-gate.md](references/seo-gate.md), [validation.md](references/validation.md), and [troubleshooting.md](references/troubleshooting.md).
 
 ## Required Workflow
 
@@ -25,10 +26,12 @@ Create a complete installable theme for `C:\xampp\htdocs\cms`. Treat `themes\def
 3. Create `theme.json`, `widgets.php`, `seed.php`, complete route views, isolated widget overrides only where required, and theme assets.
 4. Make every visible setting editable through widget schema or an admin model/Setting. Do not hide content in Blade fallbacks.
 5. Verify every `style_key` and every route before activation. Seed realistic industry data and valid menu URLs.
-6. Activate the theme, publish assets, clear view/cache state, and reseed blocks only when testing changed defaults.
-7. Run smoke tests, pagination tests, responsive screenshots, legacy-content audit, and package audit.
-8. Run the SEO skill at `.claude/skills/seo/SKILL.md` against the public URL. Fix Critical/High findings before completion.
-9. Package with `php artisan theme:package {slug}` and inspect the ZIP contents.
+6. Run `scripts/check-theme-quality.mjs`; fix every error before activation.
+7. Activate the theme, publish assets, clear view/cache state, and reseed blocks only when testing changed defaults.
+8. Run deterministic Auto CMS QA first, then only the mutable fixtures it lists as pending.
+9. Rerun the quality script after the last edit; stale QA evidence is invalid.
+10. Run the SEO skill at `.agents/skills/seo/SKILL.md` against the public URL. Fix Critical/High findings before completion.
+11. Package with `php artisan theme:package {slug}` and inspect the ZIP contents.
 
 ## Non-Negotiable Contracts
 
