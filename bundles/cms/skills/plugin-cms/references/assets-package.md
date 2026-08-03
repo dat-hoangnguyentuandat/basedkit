@@ -16,6 +16,7 @@ Before ZIP:
 
 - Keep `plugin.json` at the expected root.
 - Include only required `routes`, `resources`, `widgets`, `assets`, `database` and `src` files.
+- Với plugin có giao diện, include loader và đầy đủ bộ dịch `vi`/`en`; liệt kê entry trong ZIP để xác nhận cả hai locale thực sự được đóng gói.
 - Exclude cache, vendor, node_modules, generated ZIPs and temporary files.
 - Check no theme dependency or absolute local path remains.
 - Reinstall/update without data loss.
