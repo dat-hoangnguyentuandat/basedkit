@@ -19,14 +19,16 @@ Transform sparse or detailed inputs into a complete, implementation-ready websit
 ## Required Workflow
 
 1. Classify inputs as `brief`, `structured`, `crawl`, or `hybrid`; preserve source facts and mark assumptions.
-2. Extract business identity, audience, goals, offers, trust signals, contact data, content, assets, constraints, and reference URLs.
-3. Resolve the CMS project root from the current workspace; write only under `artifacts/sitemaps/<site-slug>/` in that project.
-4. For URL inputs, crawl into the sitemap project's research subdirectory. Treat crawl output as evidence, never as the final architecture.
-5. Infer the smallest complete information architecture suitable for the business and goals. Do not ask for details that can be safely inferred and labeled.
-6. Define navigation, routes, reusable templates, page sections, CTAs, forms, content collections, CMS capabilities, SEO intent, and responsive design direction.
-7. Preserve supplied facts exactly. Never invent factual prices, credentials, addresses, ratings, guarantees, legal claims, or contact details.
-8. Create the required outputs and validate `sitemap.json` with `scripts/validate_sitemap.js`.
-9. Resolve validation failures before handoff. Report assumptions, missing facts, crawl gaps, and confidence.
+2. Classify delivery mode as `service-business` or `ecommerce` before defining pages. Treat products, prices, stock, ordering, cart, checkout, shop/store language, or a primary Sản phẩm destination as ecommerce signals.
+3. Extract business identity, audience, goals, offers, trust signals, contact data, content, assets, constraints, and reference URLs.
+4. Resolve the CMS project root from the current workspace; write only under `artifacts/sitemaps/<site-slug>/` in that project.
+5. For URL inputs, crawl into the sitemap project's research subdirectory. Treat crawl output as evidence, never as the final architecture.
+6. Infer the smallest complete information architecture suitable for the business and goals. Do not ask for details that can be safely inferred and labeled.
+7. For ecommerce mode, read [ecommerce-sitemap.md](references/ecommerce-sitemap.md) and make product discovery, mega-menu categories, cart, checkout, stock, price, promotions, and policies first-class.
+8. Define navigation, routes, reusable templates, page sections, CTAs, forms, content collections, CMS capabilities, SEO intent, and responsive design direction.
+9. Preserve supplied facts exactly. Never invent factual prices, credentials, addresses, ratings, guarantees, legal claims, or contact details.
+10. Create the required outputs and validate `sitemap.json` with `scripts/validate_sitemap.js`.
+11. Resolve validation failures before handoff. Report assumptions, missing facts, crawl gaps, and confidence.
 
 ## URL Crawl
 
@@ -61,7 +63,7 @@ For this CMS workspace, an example output is `E:\Project\cms\artifacts\sitemaps\
 
 - Every header/footer destination resolves to a declared route or supplied external URL.
 - Every page references a declared template and contains purposeful sections.
-- Homepage communicates identity, offer, trust, and one primary action.
+- Business homepage communicates identity, offer, trust, and one primary action; ecommerce homepage follows the product-first contract in `ecommerce-sitemap.md`.
 - Detail/listing routes exist only when the content model needs them.
 - Forms define purpose and fields; commerce is declared when products, prices, ordering, or buying appear.
 - Mobile navigation, responsive section behavior, empty states, and scalable listing behavior are specified.

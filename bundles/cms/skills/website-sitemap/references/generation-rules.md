@@ -6,11 +6,11 @@ Select pages from user goals and content depth. Do not add pages only to make th
 
 - Local service: Home, Services, About, Reviews or proof, News only with a content goal, Contact.
 - Professional practice: add team/expertise and service details when evidence supports them.
-- Commerce: Home, category/listing, product detail, cart/purchase flow, policies, contact.
+- Ecommerce: Home, category/listing, product detail, cart, checkout, order success, policies, contact. Declare storefront capabilities and screens explicitly.
 - Portfolio/project business: Home, project listing/detail, services, about, contact.
 - Course/education: programs, program detail, instructors, outcomes, FAQ, enrollment/contact.
 
-## Homepage
+## Business homepage
 
 Specify sections that answer in order:
 
@@ -21,6 +21,10 @@ Specify sections that answer in order:
 5. Primary conversion action.
 
 Avoid unsupported statistics, guarantees, awards, years of experience, and medical outcomes.
+
+## Ecommerce homepage
+
+Specify sections in this order: announcement/promotion, header search/account/cart, `Danh mục sản phẩm` mega-menu, campaign hero, trust promises, flash sale, bestseller/new arrivals, brand/category discovery, editorial/news, newsletter/footer policies. Keep product discovery and purchase actions above company-introduction content. Read `ecommerce-sitemap.md` for required templates, routes, CMS capabilities, and screens.
 
 ## Routes and templates
 

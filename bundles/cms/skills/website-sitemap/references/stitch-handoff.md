@@ -21,6 +21,7 @@ Generate `stitch-prompt.md` beside the validated sitemap at `<CMS_PROJECT>/artif
 - Design listing and detail states together.
 - Include error, empty, and long-content behavior where declared.
 - Produce or export `DESIGN.md`, screen images, and code only as implementation reference.
+- For ecommerce, include desktop/mobile storefront home, product listing, product detail, cart, checkout, and order-success screens. Show the category mega-menu open on desktop and the category drawer/accordion on mobile.
 
 ## Handoff to theme-cms-business or theme-cms-ecommerce
 

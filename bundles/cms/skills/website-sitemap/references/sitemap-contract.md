@@ -21,7 +21,7 @@ Save the canonical file at `<CMS_PROJECT>/artifacts/sitemaps/<site-slug>/sitemap
     "name": "Business name",
     "slug": "business-name",
     "locale": "vi-VN",
-    "businessType": "service-business",
+    "businessType": "service-business|ecommerce",
     "goals": [],
     "audiences": []
   },
@@ -43,7 +43,7 @@ Save the canonical file at `<CMS_PROJECT>/artifacts/sitemaps/<site-slug>/sitemap
 
 ## Navigation item
 
-Use `{ "label": "Dịch vụ", "route": "/dich-vu", "type": "internal" }`. External items use `url` and `type: external`. Every internal route must exist in `pages`.
+Use `{ "label": "Dịch vụ", "route": "/dich-vu", "type": "internal" }` for business mode or `{ "label": "Sản phẩm", "route": "/san-pham", "type": "internal" }` for ecommerce. External items use `url` and `type: external`. Every internal route must exist in `pages`.
 
 ## Template
 
@@ -70,4 +70,4 @@ Each section requires `id`, `type`, `purpose`, `contentSource`, and `responsive`
 
 ## Content and CMS
 
-Store supplied facts under `content`. Add top-level `content._provenance` with a source class (`supplied`, `crawled`, `inferred`, or `placeholder`) for each content collection; add field-level provenance when one collection mixes sources. Declare collections required by pages under `cms.models`. Declare homepage/footer/float block zones under `cms.zones`. Declare `products` and `commerce.purchase_action` when selling or ordering appears.
+Store supplied facts under `content`. Add top-level `content._provenance` with a source class (`supplied`, `crawled`, `inferred`, or `placeholder`) for each content collection; add field-level provenance when one collection mixes sources. Declare collections required by pages under `cms.models`. Declare homepage/footer/float block zones under `cms.zones`. For ecommerce, require `cms.capabilities` to include `products`, `commerce.purchase_action`, `cart`, and `checkout`; require `cms.models` to include `products` and `categories`. Follow `ecommerce-sitemap.md`.

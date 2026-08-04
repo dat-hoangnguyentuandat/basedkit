@@ -27,6 +27,7 @@ function validate(report) {
   if (!['high', 'medium', 'low'].includes(report.source?.confidence)) errors.push('source.confidence is invalid');
   for (const key of ['inputs', 'assumptions', 'gaps']) if (!Array.isArray(report.source?.[key])) errors.push(`source.${key} must be an array`);
   if (!report.site?.name || !report.site?.slug || !report.site?.locale || !report.site?.businessType) errors.push('site identity fields cannot be empty');
+  if (!['service-business', 'ecommerce'].includes(report.site?.businessType)) errors.push('site.businessType must be service-business or ecommerce');
   for (const key of ['goals', 'audiences']) if (!isStrings(report.site?.[key])) errors.push(`site.${key} must be a string array`);
   for (const key of ['tone', 'imagery']) if (!isStrings(report.design?.[key])) errors.push(`design.${key} must be a string array`);
   if (!isObject(report.content?._provenance)) errors.push('content._provenance must be an object');
@@ -64,6 +65,47 @@ function validate(report) {
     }
   }
   for (const key of ['capabilities', 'models', 'zones']) if (!isStrings(report.cms?.[key])) errors.push(`cms.${key} must be a string array`);
+  const capabilitiesList = report.cms?.capabilities || [];
+  const routesList = (report.pages || []).map((page) => page.route);
+  const structuredCommerce = capabilitiesList.some((item) => ['commerce.purchase_action', 'cart', 'checkout'].includes(item)) || routesList.some((route) => ['/gio-hang', '/thanh-toan'].includes(route));
+  if (report.site?.businessType === 'service-business' && structuredCommerce) errors.push('commerce capabilities/routes require site.businessType = ecommerce');
+  if (report.site?.businessType === 'ecommerce') {
+    const capabilities = new Set(report.cms?.capabilities || []);
+    const models = new Set(report.cms?.models || []);
+    for (const capability of ['products', 'commerce.purchase_action', 'cart', 'checkout']) if (!capabilities.has(capability)) errors.push(`ecommerce sitemap requires cms.capabilities: ${capability}`);
+    for (const model of ['products', 'categories']) if (!models.has(model)) errors.push(`ecommerce sitemap requires cms.models: ${model}`);
+    for (const template of ['product-listing', 'product-detail', 'cart', 'checkout', 'order-success']) if (!templateIds.has(template)) errors.push(`ecommerce sitemap requires template: ${template}`);
+    const requiredPages = [
+      ['home', (page) => page.route === '/'],
+      ['product listing', (page) => page.route === '/san-pham' && /product-listing|category-listing/.test(page.template)],
+      ['product detail', (page) => page.route === '/san-pham/{slug}' && page.template === 'product-detail'],
+      ['cart', (page) => page.route === '/gio-hang' && page.template === 'cart'],
+      ['checkout', (page) => page.route === '/thanh-toan' && page.template === 'checkout'],
+      ['order success', (page) => /^\/dat-hang-thanh-cong\/\{[^}]+\}$/.test(page.route) && page.template === 'order-success'],
+    ];
+    const requiredPageIds = [];
+    for (const [label, predicate] of requiredPages) {
+      const page = (report.pages || []).find(predicate);
+      if (!page) errors.push(`ecommerce sitemap requires canonical ${label} page`);
+      else requiredPageIds.push(page.id);
+    }
+    const screens = new Set(report.stitch?.screens || []);
+    for (const id of requiredPageIds) if (!screens.has(id)) errors.push(`ecommerce stitch.screens requires page: ${id}`);
+    const listing = (report.pages || []).find((page) => page.route === '/san-pham');
+    const listingContract = JSON.stringify(listing?.sections || []).toLowerCase();
+    for (const [label, pattern] of [['search', /search|tìm kiếm/], ['filter', /filter|category|danh mục/], ['sort', /sort|sắp xếp/], ['pagination', /pagination|phân trang/], ['empty state', /empty|trống/]]) if (!pattern.test(listingContract)) errors.push(`ecommerce product listing requires ${label}`);
+    const detail = (report.pages || []).find((page) => page.route === '/san-pham/{slug}');
+    const detailContract = JSON.stringify(detail?.sections || []).toLowerCase();
+    for (const [label, pattern] of [['gallery', /gallery|media/], ['price', /price|giá/], ['stock', /stock|tồn kho/], ['purchase action', /purchase|add-to-cart|thêm.*giỏ/], ['related products', /related|liên quan/]]) if (!pattern.test(detailContract)) errors.push(`ecommerce product detail requires ${label}`);
+    const home = (report.pages || []).find((page) => page.route === '/' || page.template === 'home');
+    const homeSections = JSON.stringify(home?.sections || []).toLowerCase();
+    if (!/mega-menu|category-menu|product-categories|danh mục sản phẩm/.test(homeSections)) errors.push('ecommerce homepage requires product category mega-menu section');
+    if (!/product|flash-sale|bestseller|new-arrival/.test(homeSections)) errors.push('ecommerce homepage requires product discovery section');
+    const zones = report.cms?.zones || [];
+    for (const zone of ['header', 'main']) if (!zones.includes(zone)) errors.push(`ecommerce sitemap requires cms.zones: ${zone}`);
+    if (!zones.some((zone) => zone.startsWith('footer'))) errors.push('ecommerce sitemap requires a footer cms zone');
+    if (!zones.some((zone) => zone.startsWith('float'))) errors.push('ecommerce sitemap requires a floating cms zone');
+  }
   if (!isStrings(report.stitch?.screens) || report.stitch.screens.length === 0) errors.push('stitch.screens must be a non-empty string array');
   else for (const screen of report.stitch.screens) if (!pageIds.has(screen)) errors.push(`stitch screen has no page: ${screen}`);
   if (report.stitch?.promptFile !== 'stitch-prompt.md') errors.push('stitch.promptFile must equal stitch-prompt.md');
