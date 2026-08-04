@@ -3,7 +3,7 @@
 Run the bundled checker before activation and again before packaging:
 
 ```powershell
-node .agents/skills/theme-cms/scripts/check-theme-quality.mjs --theme themes/<slug> --json <run-dir>/reports/qa/theme-quality.json
+node .agents/skills/theme-cms-business/scripts/check-theme-quality.mjs --theme themes/<slug> --json <run-dir>/reports/qa/theme-quality.json
 ```
 
 ## Required rendered checks

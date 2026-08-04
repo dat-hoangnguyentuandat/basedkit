@@ -2,7 +2,7 @@
 
 ## When To Use
 
-Use a plugin for route, admin page, permission, API, migration, business data, shortcode, hook, frontend integration, reusable widget or plugin-wide settings. Use `theme-cms` for presentation-only changes.
+Use a plugin for route, admin page, permission, API, migration, business data, shortcode, hook, frontend integration, reusable widget or plugin-wide settings. Use `theme-cms-business` or `theme-cms-ecommerce` for presentation-only changes.
 
 ## Standard Layout
 

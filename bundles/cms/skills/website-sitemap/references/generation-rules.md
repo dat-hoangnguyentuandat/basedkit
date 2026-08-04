@@ -40,4 +40,4 @@ Infer a restrained direction from industry and audience. Specify intent, tone, a
 
 ## CMS handoff
 
-Map each visible section to a content source or editable widget setting. Identify routes, models, zones, forms, filters, CTAs, assets, and capabilities required by implementation. Keep sitemap independent of a particular Blade file while using concepts understood by `theme-cms`.
+Map each visible section to a content source or editable widget setting. Identify routes, models, zones, forms, filters, CTAs, assets, and capabilities required by implementation. Keep sitemap independent of a particular Blade file while using concepts understood by `theme-cms-business` and `theme-cms-ecommerce`.

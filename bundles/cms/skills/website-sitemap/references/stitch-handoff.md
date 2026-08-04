@@ -22,7 +22,7 @@ Generate `stitch-prompt.md` beside the validated sitemap at `<CMS_PROJECT>/artif
 - Include error, empty, and long-content behavior where declared.
 - Produce or export `DESIGN.md`, screen images, and code only as implementation reference.
 
-## Handoff to theme-cms
+## Handoff to theme-cms-business or theme-cms-ecommerce
 
 Provide together:
 

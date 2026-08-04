@@ -66,7 +66,7 @@ For this CMS workspace, an example output is `E:\Project\cms\artifacts\sitemaps\
 - Forms define purpose and fields; commerce is declared when products, prices, ordering, or buying appear.
 - Mobile navigation, responsive section behavior, empty states, and scalable listing behavior are specified.
 - Source facts, inferred content, placeholders, and unavailable facts remain distinguishable.
-- Output gives `theme-cms` enough information to map routes, widgets, models, zones, seed content, and capabilities.
+- Output gives `theme-cms-business` and `theme-cms-ecommerce` enough information to map routes, widgets, models, zones, seed content, and capabilities.
 
 ## Validation
 

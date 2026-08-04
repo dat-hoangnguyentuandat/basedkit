@@ -1,14 +1,21 @@
 ---
-name: theme-cms
-description: "This skill should be used when creating, updating, validating, or packaging a complete Laravel CMS theme with dynamic widgets, seed data, shared layout, versioned assets, pagination, and SEO QA."
+name: theme-cms-business
+description: "This skill should be used for service, company, clinic, education, and other non-store Laravel CMS themes with editable content, shared layout, assets, routes, pagination, and SEO QA."
 license: MIT
 metadata:
   version: "5.1.0"
 ---
 
-# CMS Theme Builder
+# CMS Business Theme Builder
 
-Create a complete installable theme for `C:\xampp\htdocs\cms`. Treat `themes\default` as the structural reference and `themes\luatsucanmong` as the latest quality example. Keep content, assets, widget settings, routes, and admin editing coherent.
+Create a complete installable business/service theme for the configured Laravel CMS root. Treat `themes\default` as the structural reference and a current industry theme as the quality example. Keep content, assets, widget settings, routes, and admin editing coherent. For a product catalog, ordering, cart, checkout, price, stock, or shop brief, activate `theme-cms-ecommerce` together with this foundation; do not use this skill alone to turn a service homepage into a storefront.
+
+## Business-mode boundary
+
+- Model the homepage around identity, services/programs, proof, process, team, insights, contact, and conversion CTAs.
+- Keep products/catalogs secondary unless the brief explicitly requests commerce; never invent cart, checkout, stock, prices, or purchase claims.
+- Use the shared commerce contracts only when the ecommerce skill is active; otherwise use service/contact CTAs and factual lead forms.
+- Preserve all contracts below as the reusable base inherited by `theme-cms-ecommerce`.
 
 ## Load References By Phase
 
