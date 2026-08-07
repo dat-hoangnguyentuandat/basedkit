@@ -1,6 +1,6 @@
 # Ecommerce layout reference
 
-Use these observations as structural direction, not as a visual or copy clone.
+Use these observations only when no approved design resolves a structural question. The approved-design contract outranks industry patterns. Never default an unrelated industry to cosmetics styling.
 
 ## Reference patterns
 

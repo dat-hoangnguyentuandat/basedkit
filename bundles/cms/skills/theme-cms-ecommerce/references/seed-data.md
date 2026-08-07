@@ -16,6 +16,8 @@ return [
 
 Use `category_slug` in product/news seed rows; the seeder resolves IDs. Keep `services` empty unless the brief explicitly needs a service catalog. Use unique slugs and valid model fields. Use `role`, not `position`, for testimonials.
 
+This collection shape does not prove entity fields. Inspect current model fields/casts/accessors, migrations, seeder normalization, public controllers, and active plugin contracts; record supported fields in `capability-matrix.json`. Do not seed gallery, variants, specifications, ratings, brand relations, filter keys, or nested categories without runtime evidence.
+
 ## Authoritative Data Warning
 
 Core treats non-empty catalog lists as authoritative:

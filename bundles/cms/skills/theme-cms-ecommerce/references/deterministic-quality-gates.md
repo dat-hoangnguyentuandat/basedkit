@@ -1,9 +1,9 @@
 # Deterministic Theme Quality Gates
 
-Run the bundled checker before activation and again before packaging:
+Run the bundled checker from the current skill directory before activation and again before packaging. Do not hardcode an installation root:
 
 ```powershell
-node .agents/skills/theme-cms-ecommerce/scripts/check-theme-quality.mjs --theme themes/<slug> --json <run-dir>/reports/qa/theme-quality.json
+node scripts/check-theme-quality.mjs --theme "<theme-path>" --json "<report-path>"
 ```
 
 ## Required rendered checks
@@ -23,3 +23,5 @@ node .agents/skills/theme-cms-ecommerce/scripts/check-theme-quality.mjs --theme 
 ## Evidence policy
 
 Use `auto-cms qa` as the authority for static, HTTP, DOM, responsive, links, images, and console checks. Manual reports may add mutable fixtures but cannot override a failed deterministic gate. Rerun QA after any theme source edit.
+
+A required assertion cannot pass with an empty observation set, zero matching cards/actions/screenshots, an unavailable URL, or a skipped interaction. Static success is necessary but never proves runtime completion.

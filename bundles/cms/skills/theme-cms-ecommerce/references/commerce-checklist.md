@@ -2,7 +2,7 @@
 
 ## Before implementation
 
-- Confirm sitemap includes `/san-pham`, category routes, product detail, `/gio-hang`, checkout, order success, account/contact, and policy pages as applicable.
+- Confirm sitemap includes core catalog/detail/contact routes plus cart, checkout, success, account, promotion, and policy routes only when the runtime capability matrix verifies their owner and availability.
 - Confirm the shared header has a data-driven `Danh mục sản phẩm` mega-menu with a left category rail, 3–4 child-category columns, keyboard/focus support, and a mobile accordion/drawer variant.
 - Read the inherited `commerce-sell.md` contract and inspect existing Sell plugin routes/helpers before writing views.
 - Decide desktop product columns and seed page size as columns × 2; provide enough products for page 2.

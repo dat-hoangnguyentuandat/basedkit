@@ -28,7 +28,7 @@ Prefer core types: `header`, `topbar`, `banner`, `slider`, `stats`, `product-lis
 - Use `banner` for one static campaign hero; use `slider` only for real multiple campaigns or deals.
 - Use model-backed groups for catalog/news content; use repeaters for manual content.
 - Keep header in `header`, CTA in `main`/`footer_top`, footer columns in `footer_1..3`, copyright in `footer_bottom`, floating actions in float zones.
-- Register a data-driven category/mega-menu block or header variant. Keep the `Danh mục sản phẩm` trigger, category rail, child-category columns, promotion CTA, and mobile accordion settings editable.
+- Register a data-driven category/mega-menu block or header variant. Define source priority, hierarchy depth, active/order rules, sparse/flat-data fallback, column distribution, and mobile behavior. Keep manual labels, promotion CTA, and media editable; keep taxonomy names model/menu-backed.
 
 ## Verify Variants Dynamically
 

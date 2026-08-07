@@ -43,7 +43,7 @@ Use `\App\Models\Setting::get()` unless the file imports `Setting` explicitly. D
 
 ## Menu Contract
 
-Seed an ecommerce-first menu: Trang chủ, Sản phẩm, Danh mục sản phẩm (with children), Khuyến mãi, Thương hiệu when supported, Tin tức, Liên hệ, Giỏ hàng. Use `type`, `url`, `slug`, and optional `children`; never use nonexistent `route_name` column. Menu seed runs only on an empty table, so inspect existing menu data during testing.
+Seed an ecommerce-first core menu: Trang chủ, Sản phẩm, Danh mục sản phẩm (with children), Khuyến mãi and Thương hiệu only when supported, Tin tức, and Liên hệ. Do not seed a plugin-owned Giỏ hàng URL. Let the active commerce integration expose cart navigation through its verified hook/helper; use a catalog or contact fallback while inactive. Use `type`, `url`, `slug`, and optional `children`; never use nonexistent `route_name` column. Menu seed runs only on an empty table, so inspect existing menu data during testing.
 
 Seeded/admin URLs may be stored as paths such as `/san-pham`, but views must resolve them through `url(ltrim($path, '/'))` or a named route before rendering. Never emit stored root-relative paths directly; see `internal-links.md`.
 

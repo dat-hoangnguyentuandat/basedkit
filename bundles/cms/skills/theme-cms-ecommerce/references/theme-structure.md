@@ -8,6 +8,7 @@ themes/{slug}/
 ├── widgets.php
 ├── seed.php
 ├── assets/
+│   ├── ASSET-SOURCES.json
 │   ├── css/{slug}.css
 │   ├── js/{slug}.js
 │   └── images/
@@ -45,7 +46,7 @@ Ship optional route views such as `brands`, `promotions`, or `wishlist` only whe
 }
 ```
 
-- Folder name and manifest `name` must match.
+- Folder name must match manifest `slug` when present, otherwise `name`. Prefer both fields with the same slug-safe value when the runtime supports them.
 - Use PNG/JPG preview when the design must be inspectable; favicon may be SVG.
 - Keep source assets inside the theme. Never reference another theme's public folder.
 - Include the `supports` object shown above only for a product-selling theme or a theme whose intended primary menu includes Sản phẩm. Omit commerce support for service-only themes. `supports` declares compatibility; it is not a hard dependency on the `sell` plugin.
@@ -71,4 +72,4 @@ Audit names, visible strings, comments, URLs, image filenames, defaults, and ZIP
 
 ## Package Shape
 
-`php artisan theme:package {slug}` stores source files without a wrapper folder. Confirm ZIP contains `theme.json`, `views`, `assets`, `widgets.php`, `seed.php`, and required widget overrides; exclude public published copies, caches, logs, and unrelated assets.
+`php artisan theme:package {slug}` stores source files without a wrapper folder. Confirm ZIP contains `theme.json`, `views`, `assets/ASSET-SOURCES.json`, current assets, `widgets.php`, `seed.php`, and required widget overrides; exclude public published copies, caches, logs, and unrelated assets. Generate sorted source/ZIP file manifests with SHA-256 and require parity.

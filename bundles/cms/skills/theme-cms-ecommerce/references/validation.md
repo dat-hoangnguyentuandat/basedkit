@@ -16,7 +16,7 @@ The legacy-token and image-resolver scans must be reviewed for false positives, 
 
 ## Smoke Routes
 
-Request every route the theme ships and representative detail routes. Require 200 for valid pages and intentional 404 for invalid slugs. Include `/`, `/san-pham`, one category-filtered listing, `/san-pham/{slug}`, `/gio-hang`, checkout, order success, `/tin-tuc`, `/tin-tuc/{slug}`, `/lien-he`, and policy routes when shipped.
+Request every route the theme ships and representative detail routes. Require 200 for valid pages and intentional 404 for invalid slugs. Include `/`, `/san-pham`, one category-filtered listing, `/san-pham/{slug}`, `/tin-tuc`, `/tin-tuc/{slug}`, and `/lien-he`; include cart, checkout, success, account, promotion, and policy routes only when verified as active in the capability matrix.
 
 Check rendered HTML for:
 
@@ -60,4 +60,4 @@ Compare counts to the seed and document authoritative pruning effects. Do not re
 php artisan theme:package {slug}
 ```
 
-Inspect the ZIP directly. Confirm manifest, views, registry, seed, current assets, widget overrides, and no fallback/old-theme tokens. Report package path and byte size.
+Inspect the ZIP directly. Confirm manifest, views, registry, seed, current assets, widget overrides, and no fallback/old-theme tokens. Install that ZIP into a clean test CMS, activate it, verify seed/admin editing, publish assets, and rerun representative route/commerce checks. Generate sorted source and ZIP manifests containing relative path, byte size, and SHA-256; require parity. Report package path, byte size, ZIP SHA-256, and reinstall result.

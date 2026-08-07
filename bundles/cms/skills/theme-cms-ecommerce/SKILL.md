@@ -1,43 +1,49 @@
 ---
 name: theme-cms-ecommerce
-description: "This skill should be used independently to create, update, validate, or package complete Laravel CMS storefronts with product catalogs, search, promotions, cart, checkout, and responsive shopping UX."
-license: MIT
-metadata:
-  version: "1.0.0"
+description: Create, update, validate, or package production Laravel CMS ecommerce themes with approved-design fidelity, editable catalog widgets, Sell-compatible purchase flows, responsive storefront QA, asset provenance, and reinstallable ZIP evidence.
 ---
 
 # CMS Ecommerce Theme Builder
 
-Create a complete installable ecommerce theme for the configured Laravel CMS root. This skill is self-contained: its `references/` and `scripts/` directories include the full CMS theme contracts, quality gates, asset rules, widget schemas, commerce rules, and validation workflow. Use `themes\\default` as the structural reference and inspect real widget variants before implementation. Produce a working storefront, not a company introduction page.
+Build a product-first storefront for the configured Laravel CMS. Treat the theme as presentation and editable demo data; do not invent core/plugin capabilities, routes, facts, reviews, policies, prices, stock, or asset rights.
 
-## Required storefront outcome
+## Non-negotiable outcome
 
-- Make the homepage sell or discover products immediately: announcement/promotion bar, header with search and cart, category navigation, hero campaign, featured/bestseller/new-arrival grids, offer strip, brand/category discovery, editorial content, trust/support promises, newsletter, and footer policies.
-- Make the desktop header include a dedicated `Danh mục sản phẩm` trigger/rail directly below or beside the main navigation. Open it as a wide mega menu: a left category column and a 3–4 column panel of child categories/subcategories, with clear separators, hover/focus states, and optional campaign image/CTA. Populate it from active CMS menu/category data, never hardcode a single brand's taxonomy.
-- Keep the mega menu usable on mobile: collapse to an accordion/drawer, keep search/cart visible, preserve keyboard navigation, and prevent horizontal overflow. Do not hide product categories behind a generic hamburger only.
-- Make `/san-pham` or the configured product route a first-class destination in primary navigation. Include category filters, search, sort, pagination, price/sale state, stock state, empty state, and mobile filter controls.
-- Make product cards consistent: fixed media ratio, badge, brand/category, name, rating when factual, sale price plus original price, discount label when derivable, wishlist only when implemented, and a visible `Thêm vào giỏ`/purchase action.
-- Make product detail pages purchase-ready: gallery, title, SKU/brand, price, sale comparison, stock, variant/quantity controls when supported, add-to-cart form, shipping/return trust copy, description/specification tabs, related products, and breadcrumbs.
-- Make cart and checkout paths real under the configured subfolder. Test active `sell` POST/CSRF flows, redirect to cart, quantity/remove/empty states, checkout validation, COD/payment result, and out-of-stock behavior.
+- Ship the complete core route-view tree, a global storefront shell, local versioned assets, registry, seed, widget overrides, provenance, and an installable ZIP.
+- Make catalog discovery primary: visible product navigation, search, data-driven categories, stable product cards, listing pagination, product detail, and honest empty/unavailable states.
+- Use `cms_product_purchase_button()` on every purchase surface. Remain useful when Sell is inactive; test real POST/CSRF/cart/checkout behavior when active.
+- Keep visible content admin-editable through settings, models, menus, or widget schemas. Never ship dead controls or unsupported filters.
+- Match approved design evidence at required breakpoints. Do not substitute a generic beige cosmetics layout when the brief or approved design differs.
 
-## Layout direction
+## Required workflow
 
-Read [ecommerce-layout.md](references/ecommerce-layout.md) before writing sitemap, widgets, seed, views, or CSS. Use the referenced sites as pattern evidence, never as copied content, branding, or assets. Load the other local references by phase exactly as listed in the included contracts; do not require another skill to resolve them.
+Read [workflow.md](references/workflow.md) first. For creation or substantial redesign, execute every phase in order and do not implement before the capability matrix and approved-design contract exist. For focused update, validation, or packaging, reuse current evidence, run the affected phases, and create any missing evidence required for the claim being made; never invent it merely to unblock release.
 
-## Data and CMS contracts
+At each phase:
 
-- Declare `supports.products` and `supports.commerce.purchase_action` in `theme.json`.
-- Seed realistic categories, products, prices, sale prices, stock, brands, SKU, product images, and enough records to exercise page 2. Never fabricate availability or reviews; label placeholders in provenance.
-- Register editable product-list, category, promotion, brand, trust, newsletter, and commerce blocks. Keep labels, CTA destinations, filters, and media admin-editable.
-- Render prices and purchase actions through `cms_product_purchase_button()` with the inactive-plugin fallback. Never hardcode `sell.*` routes or root-relative `/gio-hang` URLs.
-- Load [commerce-checklist.md](references/commerce-checklist.md) and the local references `commerce-sell.md`, `pagination.md`, `assets-cache.md`, `internal-links.md`, `validation.md`, and `deterministic-quality-gates.md` before implementation/QA.
+1. Read every reference named for that phase completely.
+2. Inspect the current CMS/plugin source identified by the reference; documentation never overrides runtime evidence.
+3. Record unsupported or unknown capabilities and degrade honestly.
+4. Produce the phase artifacts from real evidence.
+5. Run the specified gate before advancing.
 
-## Visual and responsive QA
+## Release rules
 
-- Favor clean cosmetics retail hierarchy: generous product imagery, restrained neutral/beige or brand palette, high-contrast sale accents, compact utility header, and clear shopping actions.
-- Validate 1440, 1024, 768, 390, 375, and 320px. Keep search/cart/menu usable, product prices aligned, cards equal-height, filters non-overflowing, and checkout controls reachable.
-- Capture homepage, category/listing page 1 and 2, product detail, cart, checkout, and mobile menu after lazy images settle. Run the deterministic quality gate and SEO gate after the final source edit.
+- `required`: fail when absent.
+- `required-if-supported`: implement only when verified by models/controllers/routes/helpers/plugins; otherwise document the fallback.
+- `optional-by-brief`: implement only when requested or present in approved design.
+- Never render a control that the current public controller/plugin cannot execute.
+- Never hardcode `sell.*` routes or `/gio-hang`; follow [commerce-sell.md](references/commerce-sell.md).
+- Never claim design, SEO, commerce, responsive, admin-edit, provenance, or ZIP parity from static source inspection alone.
 
-## Handoff
+## Validation and handoff
 
-Report storefront routes, category/product seed counts, active/inactive `sell` behavior, cart/checkout evidence, stock and sale-price behavior, responsive screenshots, SEO result, package path, ZIP parity, and any factual data limitations.
+Run the bundled checker from the skill directory:
+
+```powershell
+node scripts/check-theme-quality.mjs --theme "<theme-path>"
+```
+
+Then complete runtime/browser/admin/SEO/package gates from [validation.md](references/validation.md). A static pass is necessary, never sufficient.
+
+Report approved-design evidence, capability matrix, storefront routes, seed counts, inactive/active Sell results, admin edit checks, responsive screenshots, SEO findings, provenance result, package path/hash, reinstall result, ZIP parity, and factual limitations.

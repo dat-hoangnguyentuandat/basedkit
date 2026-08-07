@@ -58,3 +58,5 @@ schema keys = defaults.settings keys = keys read in widget Blade
 ```
 
 Open the admin editor, save without changing values, reload, then upload a new top-level image and a repeater image. Confirm both public URLs return `200` from `/storage/`; seed defaults must continue to return `200` from `/theme-assets/`. A visible field that cannot be changed from admin is a release blocker.
+
+Perform schema/default/Blade parity through source review plus the admin save/reload test. Do not execute an untrusted `widgets.php` merely to introspect its returned array; use the CMS's normal trusted runtime in the isolated test environment when programmatic inspection is required.
